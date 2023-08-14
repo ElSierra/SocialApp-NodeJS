@@ -1,0 +1,43 @@
+{
+  "name": "ts-node-starter",
+  "version": "1.1.0",
+  "description": "A simple TS-NODE Starter Project",
+  "main": "server.js",
+  "scripts": {
+    "start": "ts-node --transpile-only ./src/index.ts",
+    "build": "rimraf ./build && tsc",
+    "dev": "npx nodemon"
+  },
+  "keywords": [
+    "node-ts"
+  ],
+  "author": "ElSierra",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/cors": "latest",
+    "@types/express": "latest",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/morgan": "latest",
+    "@types/node": "latest",
+    "@types/node-notifier": "^8.0.2",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "ts-node": "latest",
+    "typescript": "latest"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.1.1",
+    "bcrypt": "^5.1.0",
+    "body-parser": "latest",
+    "cookie-parser": "^1.4.6",
+    "cors": "latest",
+    "dotenv": "latest",
+    "express": "latest",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.1",
+    "morgan": "latest",
+    "node-notifier": "^10.0.1",
+    "prisma": "^5.1.1",
+    "socket.io": "^4.6.1"
+  }
+}
