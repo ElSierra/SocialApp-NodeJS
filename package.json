@@ -19,8 +19,10 @@
     "@types/express": "latest",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/morgan": "latest",
+    "@types/multer": "^1.4.7",
     "@types/node": "latest",
     "@types/node-notifier": "^8.0.2",
+    "@types/uuid": "^9.0.2",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "ts-node": "latest",
     "typescript": "latest"
@@ -36,8 +38,11 @@
     "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.1",
     "morgan": "latest",
+    "multer": "^1.4.5-lts.1",
     "node-notifier": "^10.0.1",
     "prisma": "^5.1.1",
-    "socket.io": "^4.6.1"
+    "sharp": "^0.32.4",
+    "socket.io": "^4.6.1",
+    "uuid": "^9.0.0"
   }
 }
