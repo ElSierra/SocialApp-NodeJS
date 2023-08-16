@@ -23,7 +23,6 @@
     "@types/node": "latest",
     "@types/node-notifier": "^8.0.2",
     "@types/uuid": "^9.0.2",
-    "babel-plugin-transform-remove-console": "^6.9.4",
     "ts-node": "latest",
     "typescript": "latest"
   },

@@ -1,4 +1,4 @@
-import { body, query, param } from "express-validator";
+import { body, query, param, oneOf } from "express-validator";
 
 export const signupValidation = [
   body("name")
@@ -35,96 +35,40 @@ export const loginValidation = [
     .withMessage("Password must be between 2 and 15 characters long."),
 ];
 
-export const otpValidation = [
-  query("email")
-    .exists()
-    .withMessage("Email parameter is required.")
-    .isEmail()
-    .withMessage("Invalid email address."),
-  body("otp")
-    .exists()
-    .withMessage("OTP field is required.")
-    .isNumeric()
-    .withMessage("OTP must be a 4-digit number.")
-    .isLength({ min: 4, max: 4 })
-    .withMessage("OTP must be a 4-digit number."),
-];
+export const createPostValidator = [
+  body("user").optional().isMongoId().withMessage("Invalid user ID"),
+  body("audioUri").custom((value, { req }) => {
+    if (
+      ((req.body.audioUri || req.body.audioTitle) &&
+        !(req.body.videoUri || req.body.photoUri)) ||
+      ((req.body.videoUri || req.body.videoTitle) &&
+        !(req.body.audioUri || req.body.photoUri)) ||
+      (req.body.photoUri && !(req.body.audioUri || req.body.videoUri)) ||
+      req.body.postText
+    ) {
+      return true;
+    }
+    throw new Error(
+      "Either audio (URI and title) or video URI or photo URIs must be provided"
+    );
+  }),
+  body("photoUri")
+    .optional()
+    .isArray()
+    .withMessage("Photo Uri must be an array of URI"),
+  body("audioTitle")
+    .if(body("audioUri").exists())
+    .notEmpty()
+    .withMessage("Audio title is required if audio URI is provided"),
+  body("videoTitle")
+    .if(body("videoUri").exists())
+    .isString()
+    .notEmpty()
+    .withMessage("Video title is required if video URI is provided"),
 
-export const resetPasswordValidation = [
-  body("email")
-    .exists()
-    .withMessage("Email parameter is required.")
-    .isEmail()
-    .withMessage("Email parameter is required."),
-];
+  body("postText")
+    .optional()
+    .isString()
+    .withMessage("Post text must be a string"),
 
-export const emailJWTValidation = [
-  param("token").exists().isJWT().withMessage("Invalid JWT"),
-];
-
-export const passwordChangeValidation = [
-  body("oldPassword").exists().isString().withMessage("Invalid"),
-  body("password")
-    .exists()
-    .isStrongPassword()
-    .withMessage(
-      "Password must be at least 8 characters long and include a mix of uppercase and lowercase letters, numbers, and symbols."
-    ),
-];
-
-export const locationUpdateValidation = [
-  body("location").exists().isLatLong().withMessage("Invalid location format."),
-
-  body("address").exists().withMessage("Invalid address format."),
-];
-
-export const orderFoodValidation = [
-  body("menuList").exists().isArray().withMessage("Not Valid MenuId Array"),
-  body("restaurantId").exists().isMongoId().withMessage("Not Valid MenuId"),
-];
-
-export const makePaymentValidation = [
-  body("orderId").exists().isMongoId().withMessage("Not Valid MenuId"),
-];
-export const retryOTPValidation = [
-  query("email").exists().isEmail().withMessage("Not Valid Email"),
-];
-
-export const restaurantGetValidation = [
-  query("skip").optional().isNumeric().withMessage("Not valid Number"),
-  query("name").optional().isString().withMessage("Not valid string"),
-  query("take").optional().isNumeric().withMessage("Not valid number"),
-];
-
-export const CreateRestaurantValidation = [
-  body("location").exists().isLatLong().withMessage("Invalid location format."),
-  body("category").exists().withMessage("empty"),
-  body("address").exists().withMessage("Invalid address format."),
-  body("name").exists().isString().withMessage("Invalid"),
-];
-export const rateRestaurantsValidation = [
-  query("restaurant").exists().isMongoId().withMessage("Invalid"),
-  query("like").exists().isBoolean().withMessage("Not Boolean"),
-];
-export const getSingleRestaurantValidation = [
-  param("id").exists().isMongoId().withMessage("invalid"),
-];
-
-export const createMenuValidation = [
-  query("restaurant").exists().isMongoId().withMessage("Invalid"),
-  body("name").exists().isString().withMessage("Invalid"),
-  body("price").exists().isFloat().withMessage("Invalid"),
-];
-
-export const updateInfoValidation = [
-  body("name").isString().optional(),
-  body("phone")
-    .exists()
-    .withMessage("Phone field is required.")
-    .isMobilePhone(["en-NG", "en-GH"])
-    .withMessage("Invalid phone number format."),
-];
-
-export const uploadPhotoPreviewValidation = [
-  body("photoPreview").isDataURI().exists(),
 ];
