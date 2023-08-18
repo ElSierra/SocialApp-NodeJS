@@ -29,15 +29,54 @@ const fileFilter = function (
 ) {
   console.log(file);
 
-  if (file.mimetype.startsWith("image/")||file.mimetype.startsWith("video/")||file.mimetype.startsWith("audio/")) {
+  if (file.mimetype.startsWith("image/")) {
     cb(null, true);
   } else {
     cb(new Error("Invalid file type."));
   }
 };
+const fileFilterVideo = function (
+  req: any,
+  file: Express.Multer.File,
+  cb: Function
+) {
+  console.log(file);
+
+  if (file.mimetype === "video/mp4") {
+    cb(null, true);
+  } else {
+    cb(new Error("Invalid file type, only MP4 is supported"));
+  }
+};
+
+const fileFilterAudio = function (
+  req: any,
+  file: Express.Multer.File,
+  cb: Function
+) {
+  console.log(file);
+
+  if (file.mimetype.startsWith("audio/")) {
+    cb(null, true);
+  } else {
+    cb(new Error("Invalid file type, only MP4 is supported"));
+  }
+};
 
 export const upload = multer({
   storage: storage,
-  limits: { fileSize: 10000000 },
+  limits: { fileSize: 1000000 },
   fileFilter,
+});
+
+export const uploadVideo = multer({
+  storage: storage,
+  limits: { fileSize: 10000000 },
+  fileFilter: fileFilterVideo,
+});
+
+export const uploadAudio = multer({
+  storage: storage,
+  limits: { fileSize: 10000000 },
+  fileFilter: fileFilterAudio,
 });

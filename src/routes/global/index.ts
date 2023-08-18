@@ -13,16 +13,36 @@ router.get("/", (req, res) => {
 router.get("/pic/:id", (req, res) => {
   const { id } = req.params;
   const { d } = req.query;
-  console.log("🚀 ~ file: index.ts:16 ~ router.get ~ d:", d)
+  console.log("🚀 ~ file: index.ts:16 ~ router.get ~ d:", d);
 
   if (fs.existsSync(path.join(rootDir, "/uploads/", `${id}`))) {
     if (d) {
-      console.log('yes');
+      console.log("yes");
       return res.download(path.join(rootDir, "/uploads/", `${id}`));
     }
     return res.sendFile(path.join(rootDir, "/uploads/", `${id}`));
   }
 
   return res.sendFile(path.join(rootDir, "/uploads/", `nopic.png`));
+});
+
+router.get("/video/:id", (req, res) => {
+  const { id } = req.params;
+
+  if (fs.existsSync(path.join(rootDir, "/uploads/", `${id}`))) {
+    return res.sendFile(path.join(rootDir, "/uploads/", `${id}`));
+  }
+
+  return res.json(null);
+});
+
+router.get("/audio/:id", (req, res) => {
+  const { id } = req.params;
+
+  if (fs.existsSync(path.join(rootDir, "/uploads/", `${id}`))) {
+    return res.sendFile(path.join(rootDir, "/uploads/", `${id}`));
+  }
+
+  return res.json(null);
 });
 export default router;
