@@ -12,5 +12,7 @@ export const postPhoto = (req:Request, res:Response) => {
       console.log("🚀 ~ file: index.ts:42 ~ router.post ~ path:", path);
 
       res.send({ photo: path[0] });
+    }else {
+      res.json({ msg: "Error in upload" });
     }
 };

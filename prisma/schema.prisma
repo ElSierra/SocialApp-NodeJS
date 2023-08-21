@@ -11,21 +11,21 @@ datasource db {
 }
 
 model User {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
-  email         String      @unique
-  name          String
-  userName      String      @unique
-  password      String
-  verified      Boolean     @default(false)
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  email           String      @unique
+  name            String
+  userName        String      @unique
+  password        String
+  verified        Boolean     @default(false)
   emailIsVerified Boolean     @default(false)
-  prefs         Json?
-  imageUri      String?
-  post          Post[]
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  followers     Followers[]
-  following     Following[]
-  comments      Comment[]
+  prefs           Json?
+  imageUri        String?
+  post            Post[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  followers       Followers[]
+  following       Following[]
+  comments        Comment[]
 }
 
 model Follower {
@@ -45,12 +45,16 @@ model Post {
   photoUri   String[]
   postText   String?
   videoViews String?
+  createdAt  DateTime?  @default(now())
+  updatedAt  DateTime?  @updatedAt
 }
 
 model Followers {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   user   User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
+      createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
 model Following {
@@ -58,6 +62,8 @@ model Following {
 
   user   User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
+    createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
 model Comment {
@@ -67,4 +73,6 @@ model Comment {
   Post   Post?   @relation(fields: [postId], references: [id])
   postId String? @db.ObjectId
   userId String  @db.ObjectId
+      createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }

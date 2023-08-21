@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { ErrorRequestHandler, NextFunction, Response, Request } from "express";
-
+import multer from "multer";
 
 export const ErrorHandler = (
   error: ErrorRequestHandler,
@@ -21,10 +21,15 @@ export const ErrorHandler = (
         break;
 
       default:
-        res.status(500).json({ message: "Something went wrong" });
+        return res.status(500).json({ message: "Something went wrong" });
     }
+    return;
+  }
+  if (error instanceof multer.MulterError) {
+    // A Multer error occurred during file upload
+    return res.status(400).json({ message: "Multer Error: " + error.message });
   } else {
-    console.log(error)
-    res.status(500).json({ msg: "internal server error" });
+    console.log(error);
+    return res.status(500).json({ msg: "internal server error" });
   }
 };

@@ -65,18 +65,18 @@ const fileFilterAudio = function (
 
 export const upload = multer({
   storage: storage,
-  limits: { fileSize: 1000000 },
+  limits: { fileSize: 6000000 },
   fileFilter,
 });
 
 export const uploadVideo = multer({
   storage: storage,
-  limits: { fileSize: 10000000 },
+  limits: { fileSize: 300000000 },
   fileFilter: fileFilterVideo,
 });
 
 export const uploadAudio = multer({
   storage: storage,
-  limits: { fileSize: 10000000 },
+  limits: { fileSize: 20000000 },
   fileFilter: fileFilterAudio,
 });

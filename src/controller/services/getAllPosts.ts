@@ -25,7 +25,8 @@ export const getAllPosts = async (
       ]
     });
     if (posts) {
-      return res.json({ posts });
+      console.log("🚀 ~ file: getAllPosts.ts:28 ~ posts:", posts)
+      return res.status(200).json({ posts });
     }
     throw new Error("Error in trying get posts");
   } catch (e) {

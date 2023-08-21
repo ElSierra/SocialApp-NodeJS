@@ -2,31 +2,31 @@ import prisma from "../../lib/prisma/init";
 import { NextFunction, Request, Response } from "express";
 
 export const getAllPosts = async (
-  req: Request,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {
+  const {id}= req.user
   try {
-    const posts = await prisma.post.findMany({
-      include: {
-        user: {
-          select: {
-            imageUri: true,
-            name: true,
-            userName:true,
-            verified: true,
-          },
-        },
-      },
+    const posts = await prisma.user.findMany({
       where:{
-
+        id
       },
-      orderBy: [
-        {
-          id: 'desc'
+      select:{
+        following:{
+          include:{
+            user:{
+              select:{
+                imageUri:true,
+                post:true,
+                userName:true,
+                name:true,
+              }
+            }
+          }
         }
-      ]
-    });
+      }
+    })
     if (posts) {
       return res.json({ posts });
     }

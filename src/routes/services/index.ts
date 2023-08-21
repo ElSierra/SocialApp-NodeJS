@@ -8,11 +8,13 @@ import { upload, uploadAudio, uploadVideo } from "../../config/multer";
 import { getAllPosts } from "../../controller/services/getAllPosts";
 import { postVideo } from "../../controller/services/postVideo";
 import { postAudio } from "../../controller/services/postAudio";
+import { getRandomPosts } from "../../controller/services/getRandomPosts";
 
 const router = Router();
 
 router.post("/post", createPostValidator, handleErrors, postContent);
 router.get("/all-posts", getAllPosts);
+router.get("/random-posts", getRandomPosts);
 
 router.post("/upload-photos",upload.array("photos"), postPhoto);
 router.post("/upload-video",uploadVideo.single("video"), postVideo);
