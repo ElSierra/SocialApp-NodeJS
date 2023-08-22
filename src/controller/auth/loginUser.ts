@@ -2,12 +2,12 @@ import { NextFunction, Response } from "express";
 import prisma from "../../lib/prisma/init";
 import { compareHashedPassword, createJWT } from "../../middleware/auth";
 export async function loginUser(req: any, res: Response, next: NextFunction) {
-  const { userName, password } = req.body;
-  console.log("🚀 ~ file: loginUser.ts:4 ~ createUser ~ req.body:", req.body);
+  const { userName, password }:{userName:string,password:string} = req.body;
+  const formattedUserName = userName.toLowerCase();
   try {
     const user = await prisma.user.findUnique({
       where: {
-        userName,
+        userName:formattedUserName,
       },
       select: {
         password: true,

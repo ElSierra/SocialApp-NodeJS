@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import prisma from "../../lib/prisma/init";
+import prisma from "../../../lib/prisma/init";
 
 export const getRandomPosts = async (
   req: Request,

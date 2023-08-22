@@ -29,7 +29,7 @@
     "typescript": "latest"
   },
   "dependencies": {
-    "@prisma/client": "^5.1.1",
+    "@prisma/client": "^5.2.0",
     "bcrypt": "^5.1.0",
     "body-parser": "latest",
     "cookie-parser": "^1.4.6",

@@ -1,4 +1,4 @@
-import prisma from "../../lib/prisma/init";
+import prisma from "../../../lib/prisma/init";
 import { NextFunction, Request, Response } from "express";
 
 export const getAllPosts = async (

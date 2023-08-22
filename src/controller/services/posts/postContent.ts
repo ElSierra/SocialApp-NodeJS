@@ -1,5 +1,5 @@
 import { NextFunction, Response } from "express";
-import prisma from "../../lib/prisma/init";
+import prisma from "../../../lib/prisma/init";
 
 export const postContent = async (
   req: any,

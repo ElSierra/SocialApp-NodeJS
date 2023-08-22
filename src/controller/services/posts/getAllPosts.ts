@@ -1,4 +1,4 @@
-import prisma from "../../lib/prisma/init";
+import prisma from "../../../lib/prisma/init";
 import { NextFunction, Request, Response } from "express";
 
 export const getAllPosts = async (
@@ -13,19 +13,19 @@ export const getAllPosts = async (
           select: {
             imageUri: true,
             name: true,
-            userName:true,
+            userName: true,
             verified: true,
           },
         },
       },
       orderBy: [
         {
-          id: 'desc'
-        }
-      ]
+          id: "desc",
+        },
+      ],
     });
     if (posts) {
-      console.log("🚀 ~ file: getAllPosts.ts:28 ~ posts:", posts)
+      console.log("🚀 ~ file: getAllPosts.ts:28 ~ posts:", posts);
       return res.status(200).json({ posts });
     }
     throw new Error("Error in trying get posts");
