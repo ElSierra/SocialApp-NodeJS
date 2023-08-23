@@ -12,7 +12,7 @@ export const searchForPosts = async (
   try {
     const posts = await prisma.post.findMany({
       where: {
-        postText: { contains: q?.toString() },
+        postText: { contains: q?.toString(),  mode: "insensitive"  },
       },
       orderBy: { id: "desc" },
       include: {

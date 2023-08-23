@@ -11,26 +11,26 @@ datasource db {
 }
 
 model User {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  email           String   @unique
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  email           String    @unique
   name            String
-  userName        String   @unique
+  userName        String    @unique
   password        String
-  verified        Boolean  @default(false)
-  emailIsVerified Boolean  @default(false)
+  verified        Boolean   @default(false)
+  emailIsVerified Boolean   @default(false)
   prefs           Json?
   imageUri        String?
   post            Post[]
   followingCount  BigInt?   @default(0)
   followersCount  BigInt?   @default(0)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  followers       User[]   @relation("UserFollows", fields: [followersIDs], references: [id])
-  followersIDs    String[] @db.ObjectId
-  following       User[]   @relation("UserFollows", fields: [followingIDs], references: [id])
-  followingIDs    String[] @db.ObjectId
-
-  comments Comment[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  followers       User[]    @relation("UserFollows", fields: [followersIDs], references: [id])
+  followersIDs    String[]  @db.ObjectId
+  following       User[]    @relation("UserFollows", fields: [followingIDs], references: [id])
+  followingIDs    String[]  @db.ObjectId
+  comments        Comment[]
+  like            Like[]
 }
 
 model Post {
@@ -47,13 +47,24 @@ model Post {
   videoViews String?
   createdAt  DateTime? @default(now())
   updatedAt  DateTime? @updatedAt
+  like       Like[]
+}
+
+model Like {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post?    @relation(fields: [postId], references: [id])
+  userId    String   @db.ObjectId
+  postId    String?  @db.ObjectId
+  commentId String?  @db.ObjectId
+  createdAt DateTime @default(now())
 }
 
 model Comment {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  post      String
+  comment   String
   User      User     @relation(fields: [userId], references: [id])
-  Post      Post?    @relation(fields: [postId], references: [id])
+  post      Post?    @relation(fields: [postId], references: [id])
   postId    String?  @db.ObjectId
   userId    String   @db.ObjectId
   createdAt DateTime @default(now())

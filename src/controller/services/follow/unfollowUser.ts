@@ -1,9 +1,9 @@
 import prisma from "../../../lib/prisma/init";
 import updateFollowerCounts from "../../../modules/updateFollows";
-import { User } from "./../../../../node_modules/.prisma/client/index.d";
+import { User } from ".prisma/client";
 import { NextFunction, Response } from "express";
 
-export const followUser = async (
+export const unfollowUser = async (
   req: any,
   res: Response,
   next: NextFunction
@@ -18,7 +18,7 @@ export const followUser = async (
       },
       data: {
         following: {
-          connect: {
+          disconnect: {
             id: req.query?.id,
           },
         },
@@ -26,21 +26,20 @@ export const followUser = async (
     });
 
     if (userWithFollower) {
-      const userFollow = updateFollowerCounts(req.user.id);
-
-      const guestFollow = updateFollowerCounts(req.query?.id);
-      Promise.all([userFollow, guestFollow])
-        .then((values) => {
-          return res.status(200).json({
-            msg: "followed",
-          });
-        })
-        .catch((e) => {
-          return res.status(200).json({
-            msg: "followed",
-          });
-        });
+      updateFollowerCounts(req.user.id)
+        .then(() => console.log("Follower counts updated"))
+        .catch((error) =>
+          console.error("Error updating follower counts:", error)
+        )
+        updateFollowerCounts(req.query?.id)
+        .then(() => console.log("Follower counts updated"))
+        .catch((error) =>
+          console.error("Error updating follower counts:", error)
+        )
     }
+    return res.status(200).json({
+      msg: "unfollowed",
+    });
   } catch (e) {
     next(e);
   }

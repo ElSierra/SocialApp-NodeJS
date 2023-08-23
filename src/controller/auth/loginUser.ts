@@ -16,8 +16,8 @@ export async function loginUser(req: any, res: Response, next: NextFunction) {
         email: true,
         name: true,
         userName: true,
-        followers: true,
-        following: true,
+        followersCount:true,
+        followingCount:true,
         imageUri: true,
       },
     });
@@ -29,8 +29,8 @@ export async function loginUser(req: any, res: Response, next: NextFunction) {
         imageUri,
         emailIsVerified,
         name,
-        followers,
-        following,
+        followersCount,
+        followingCount,
       } = user;
       if (await compareHashedPassword(password, user.password)) {
         const token = createJWT({
@@ -46,8 +46,8 @@ export async function loginUser(req: any, res: Response, next: NextFunction) {
             imageUri,
             emailIsVerified,
             name,
-            followers,
-            following,
+            followersCount:followersCount?.toString(),
+            followingCount:followingCount?.toString(),
           },
 
           msg: "login success",

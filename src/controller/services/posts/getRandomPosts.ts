@@ -14,25 +14,26 @@ export const getRandomPosts = async (
           select: {
             name: true,
             userName: true,
-            verified:true,
+            verified: true,
             imageUri: true,
           },
         },
       },
+      take:20,
     });
     let uniqueNumbers: Array<number> = [];
 
     if (posts.length > 2) {
-      const numbers = Array.from({ length: posts.length - 1 }, (_, i) => i); // Create an array of numbers from 0 to 9
-      const shuffledNumbers = numbers.sort(() => Math.random() - 0.5); // Shuffle the array
-      uniqueNumbers = shuffledNumbers.slice(0, 3);
+      const numbers = Array.from({ length: posts.length }, (_, i) => i);
+      const shuffledNumbers = numbers.sort(() => Math.random() - 0.5);
+      uniqueNumbers = shuffledNumbers.slice(0, posts.length );
     } else if (posts.length === 2) {
       uniqueNumbers = [0, 1];
     } else if (posts.length === 1) {
       uniqueNumbers = [0];
     }
     const randomPostToSend = [];
-
+    console.log("uniqueNumbers", uniqueNumbers);
     for (let i in uniqueNumbers) {
       const filteredPosts = posts.filter(
         (posts, idx) => idx == uniqueNumbers[i]
@@ -41,7 +42,7 @@ export const getRandomPosts = async (
     }
     console.log(
       "🚀 ~ file: getRandomPosts.ts:23 ~ randomPostToSend:",
-      randomPostToSend
+      randomPostToSend.length
     );
     return res.status(200).json({ posts: randomPostToSend });
   } catch (e) {

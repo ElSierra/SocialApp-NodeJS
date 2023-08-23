@@ -72,3 +72,16 @@ export const createPostValidator = [
     .withMessage("Post text must be a string"),
 
 ];
+
+
+export const followValidator = [
+  query("id").exists().isMongoId().withMessage("Not valid Id")
+]
+
+export const searchValidator = [
+  query("q").exists().isString().withMessage("query cannot be empty")
+]
+export const getPostsValidator = [
+  query("take").exists().isNumeric().withMessage("produce posts to take"),
+  query("skip").exists().isNumeric().withMessage("produce skip to take"),
+]
