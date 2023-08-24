@@ -4,7 +4,7 @@
   "description": "A simple TS-NODE Starter Project",
   "main": "server.js",
   "scripts": {
-    "start": "ts-node --transpile-only ./src/index.ts",
+    "start": "ts-node --transpile-only ./src/server.ts",
     "build": "rimraf ./build && tsc",
     "dev": "npx nodemon"
   },
