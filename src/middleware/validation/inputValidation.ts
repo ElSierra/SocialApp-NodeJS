@@ -6,8 +6,21 @@ export const signupValidation = [
     .withMessage("Name field is required.")
     .isString()
     .withMessage("Name field must be a string.")
-    .isLength({ max: 15, min: 2 })
+    .isLength({ max: 100, min: 2 })
     .withMessage("Name must be between 2 and 15 characters long."),
+  body("userName")
+    .custom((value) => {
+      if (value.includes(" ")) {
+        throw new Error("Spaces are not allowed in the input.");
+      }
+      return true;
+    })
+    .exists()
+    .withMessage("UserName field is required.")
+    .isString()
+    .withMessage("UserName field must be a string.")
+    .isLength({ max: 20, min: 1 })
+    .withMessage("UserName must be between 2 and 15 characters long."),
   body("email")
     .exists()
     .withMessage("Email field is required.")
@@ -70,18 +83,16 @@ export const createPostValidator = [
     .optional()
     .isString()
     .withMessage("Post text must be a string"),
-
 ];
 
-
 export const followValidator = [
-  query("id").exists().isMongoId().withMessage("Not valid Id")
-]
+  query("id").exists().isMongoId().withMessage("Not valid Id"),
+];
 
 export const searchValidator = [
-  query("q").exists().isString().withMessage("query cannot be empty")
-]
+  query("q").exists().isString().withMessage("query cannot be empty"),
+];
 export const getPostsValidator = [
   query("take").exists().isNumeric().withMessage("produce posts to take"),
   query("skip").exists().isNumeric().withMessage("produce skip to take"),
-]
+];
