@@ -17,6 +17,7 @@ export const getAllPosts = async (
             userId: true,
           },
         },
+        createdAt:true,
         postText: true,
         audioTitle: true,
         audioUri: true,
@@ -26,6 +27,7 @@ export const getAllPosts = async (
         photoUri: true,
         videoViews: true,
         userId: true,
+        
         user: {
           select: {
             id: true,

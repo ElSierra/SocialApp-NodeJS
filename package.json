@@ -4,7 +4,7 @@
   "description": "A simple TS-NODE Starter Project",
   "main": "server.js",
   "scripts": {
-    "start": "ts-node --transpile-only ./src/server.ts",
+    "start": "cross-env STAGE=production  ts-node --transpile-only ./src/server.ts",
     "build": "rimraf ./build && tsc",
     "dev": "npx nodemon"
   },
@@ -20,11 +20,13 @@
     "@types/ffmpeg": "^1.0.4",
     "@types/fluent-ffmpeg": "^2.1.21",
     "@types/jsonwebtoken": "^9.0.2",
+    "@types/lodash.merge": "^4.6.7",
     "@types/morgan": "latest",
     "@types/multer": "^1.4.7",
     "@types/node": "latest",
     "@types/node-notifier": "^8.0.2",
     "@types/uuid": "^9.0.2",
+    "cross-env": "^7.0.3",
     "ts-node": "latest",
     "typescript": "latest"
   },
@@ -40,6 +42,7 @@
     "ffmpeg": "^0.0.4",
     "fluent-ffmpeg": "^2.1.2",
     "jsonwebtoken": "^9.0.1",
+    "lodash.merge": "^4.6.2",
     "morgan": "latest",
     "multer": "^1.4.5-lts.1",
     "node-notifier": "^10.0.1",
