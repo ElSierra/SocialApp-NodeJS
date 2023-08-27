@@ -38,7 +38,7 @@ export const getRandomFollowers = async (
         const isFollowed = loggedInUser.followingIDs.includes(user.id);
         return { ...user, isFollowed };
       });
-      console.log("🚀 ~ file: getRandomPeople.ts:41 ~ usersWithFollowStatus ~ usersWithFollowStatus:", loggedInUser.followingIDs)
+      //console.log("🚀 ~ file: getRandomPeople.ts:41 ~ usersWithFollowStatus ~ usersWithFollowStatus:", loggedInUser.followingIDs)
 
       updatedUsers = usersWithFollowStatus;
     }
@@ -65,10 +65,7 @@ export const getRandomFollowers = async (
       );
       randomPeople.push(...filteredPeople);
     }
-    console.log(
-      "🚀 ~ file: getRandomPosts.ts:23 ~ randomPostToSend:",
-      randomPeople
-    );
+  
     return res.status(200).json({ people: randomPeople });
   } catch (e) {
     next(e);

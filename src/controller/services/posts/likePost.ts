@@ -50,13 +50,13 @@ export const like = async (req: any, res: Response, next: NextFunction) => {
         },
       });
 
-      console.log("Post unliked:", likeToDelete);
+ 
       if (deletePost) {
         return res.status(200).json({ msg: "unliked" });
       }
     }
   } catch (e) {
-    console.log(e);
+
     next(e);
   }
 };

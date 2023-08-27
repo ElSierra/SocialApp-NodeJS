@@ -52,7 +52,7 @@ export const getAllPosts = async (
       take: Number(take),
       skip: Number(skip),
     });
-    console.log("🚀 ~ file: getAllPosts.ts:36 ~ posts:", posts[9]);
+    
     if (posts) {
       const updatedPosts = [];
 
@@ -63,7 +63,7 @@ export const getAllPosts = async (
         });
       }
 
-      console.log("🚀 ~ file: getAllPosts.ts:55 ~ updatedPosts:", updatedPosts);
+     
       return res.status(200).json({ posts: updatedPosts });
     }
 

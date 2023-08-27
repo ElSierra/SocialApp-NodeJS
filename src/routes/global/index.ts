@@ -13,11 +13,11 @@ router.get("/", (req, res) => {
 router.get("/pic/:id", (req, res) => {
   const { id } = req.params;
   const { d } = req.query;
-  console.log("🚀 ~ file: index.ts:16 ~ router.get ~ d:", d);
+
 
   if (fs.existsSync(path.join(rootDir, "/uploads/", `${id}`))) {
     if (d) {
-      console.log("yes");
+
       return res.download(path.join(rootDir, "/uploads/", `${id}`));
     }
     return res.sendFile(path.join(rootDir, "/uploads/", `${id}`));

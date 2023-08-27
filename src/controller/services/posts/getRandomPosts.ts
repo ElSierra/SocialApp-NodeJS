@@ -33,17 +33,14 @@ export const getRandomPosts = async (
       uniqueNumbers = [0];
     }
     const randomPostToSend = [];
-    console.log("uniqueNumbers", uniqueNumbers);
+   
     for (let i in uniqueNumbers) {
       const filteredPosts = posts.filter(
         (posts, idx) => idx == uniqueNumbers[i]
       );
       randomPostToSend.push(...filteredPosts);
     }
-    console.log(
-      "🚀 ~ file: getRandomPosts.ts:23 ~ randomPostToSend:",
-      randomPostToSend.length
-    );
+    
     return res.status(200).json({ posts: randomPostToSend });
   } catch (e) {
     next(e);
