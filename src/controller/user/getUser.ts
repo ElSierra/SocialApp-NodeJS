@@ -17,6 +17,7 @@ export const getUser = async (req: any, res: Response, next: NextFunction) => {
         followingCount: true,
         email: true,
         following: true,
+        verified: true,
         imageUri: true,
         emailIsVerified: true,
       },
@@ -28,6 +29,7 @@ export const getUser = async (req: any, res: Response, next: NextFunction) => {
         imageUri,
         emailIsVerified,
         name,
+        verified,
         followersCount,
         followingCount,
       } = user;
@@ -37,6 +39,7 @@ export const getUser = async (req: any, res: Response, next: NextFunction) => {
           userName,
           imageUri,
           emailIsVerified,
+          verified,
           name,
           followersCount:followersCount?.toString(),
           followingCount:followingCount?.toString(),

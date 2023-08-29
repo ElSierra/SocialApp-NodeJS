@@ -2,12 +2,13 @@ import { NextFunction, Response } from "express";
 import prisma from "../../lib/prisma/init";
 import { compareHashedPassword, createJWT } from "../../middleware/auth";
 export async function loginUser(req: any, res: Response, next: NextFunction) {
-  const { userName, password }:{userName:string,password:string} = req.body;
+  const { userName, password }: { userName: string; password: string } =
+    req.body;
   const formattedUserName = userName.toLowerCase();
   try {
     const user = await prisma.user.findUnique({
       where: {
-        userName:formattedUserName,
+        userName: formattedUserName,
       },
       select: {
         password: true,
@@ -15,9 +16,10 @@ export async function loginUser(req: any, res: Response, next: NextFunction) {
         emailIsVerified: true,
         email: true,
         name: true,
+        verified: true,
         userName: true,
-        followersCount:true,
-        followingCount:true,
+        followersCount: true,
+        followingCount: true,
         imageUri: true,
       },
     });
@@ -27,6 +29,7 @@ export async function loginUser(req: any, res: Response, next: NextFunction) {
         email,
         userName,
         imageUri,
+        verified,
         emailIsVerified,
         name,
         followersCount,
@@ -46,8 +49,9 @@ export async function loginUser(req: any, res: Response, next: NextFunction) {
             imageUri,
             emailIsVerified,
             name,
-            followersCount:followersCount?.toString(),
-            followingCount:followingCount?.toString(),
+            verified,
+            followersCount: followersCount?.toString(),
+            followingCount: followingCount?.toString(),
           },
 
           msg: "login success",

@@ -68,19 +68,19 @@ const fileFilterAudio = function (
 
 export const upload = multer({
   storage: storage,
-  limits: { fileSize: 6000000 },
+  limits: { fileSize: 16000000 },
   fileFilter,
 });
 
 export const uploadVideo = multer({
   storage: storage,
-  limits: { fileSize: 300000000 },
+  limits: { fileSize: 16000000 },
   fileFilter: fileFilterVideo,
 });
 
 export const uploadAudio = multer({
   storage: storage,
-  limits: { fileSize: 20000000 },
+  limits: { fileSize: 16000000 },
   fileFilter: fileFilterAudio,
 });
 
@@ -88,7 +88,7 @@ export const uploadOcean =
   config.stage === "production" &&
   multer({
     fileFilter,
-    limits: { fileSize: 1000000 },
+    limits: { fileSize: 16000000 },
     storage: multerS3({
       s3: s3Config,
       bucket: SpacesBucketName,
@@ -103,7 +103,7 @@ export const uploadOceanAudio =
   config.stage === "production" &&
   multer({
     fileFilter: fileFilterAudio,
-    limits: { fileSize: 20000000 },
+    limits: { fileSize: 16000000 },
     storage: multerS3({
       s3: s3Config,
       bucket: SpacesBucketName,
@@ -118,7 +118,7 @@ export const uploadOceanVideo =
   config.stage === "production" &&
   multer({
     fileFilter: fileFilterVideo,
-    limits: { fileSize: 300000000 },
+    limits: { fileSize: 16000000 },
     storage: multerS3({
       s3: s3Config,
       bucket: SpacesBucketName,

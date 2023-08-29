@@ -1,3 +1,4 @@
+import { query } from "express-validator";
 import prisma from "../../../lib/prisma/init";
 import updateFollowerCounts from "../../../modules/updateFollows";
 import { User } from "./../../../../node_modules/.prisma/client/index.d";
@@ -10,6 +11,10 @@ export const followUser = async (
 ) => {
   const { id } = req.user;
   console.log("🚀 ~ file: followUser.ts:7 ~ followUser ~ id:", id);
+
+  if (id === req.query.id) {
+    return res.status(200).json({ msg: "can't follow self" });
+  }
 
   try {
     const userWithFollower = await prisma.user.update({

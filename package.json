@@ -6,7 +6,8 @@
   "scripts": {
     "start": "cross-env STAGE=production  ts-node --transpile-only ./src/server.ts",
     "build": "rimraf ./build && tsc",
-    "dev": "npx nodemon"
+    "dev": "npx nodemon",
+    "dev:prod": "cross-env STAGE=production npx nodemon"
   },
   "keywords": [
     "node-ts"
@@ -33,6 +34,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.400.0",
+    "@aws-sdk/s3-request-presigner": "^3.400.0",
     "@prisma/client": "^5.2.0",
     "bcrypt": "^5.1.0",
     "body-parser": "latest",

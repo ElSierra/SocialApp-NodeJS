@@ -31,6 +31,8 @@ import { like } from "../../controller/services/posts/likePost";
 import { postComment } from "../../controller/services/posts/postComment";
 import { getCommentByPost } from "../../controller/services/posts/getCommentsByPost";
 import { getPostByFollowing } from "../../controller/services/posts/getPostByFollowing";
+import { getMyPosts } from "../../controller/services/posts/getMyPosts";
+import { updatePhoto } from "../../controller/user/updatePhoto";
 
 const router = Router();
 const isProduction = config.stage === "production";
@@ -47,6 +49,7 @@ router.post(
     : upload.array("photos"),
   postPhoto
 );
+
 router.post(
   "/upload-video",
   isProduction && uploadOceanVideo
@@ -77,5 +80,6 @@ router.get(
   handleErrors,
   getPostByFollowing
 );
+router.get("/my-posts", getPostsValidator, handleErrors, getMyPosts);
 
 export default router;

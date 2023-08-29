@@ -1,16 +1,16 @@
-import { like } from "./likePost";
+import { NextFunction, Response } from "express";
 import prisma from "../../../lib/prisma/init";
-import { NextFunction, Request, Response } from "express";
-
-export const getAllPosts = async (
+export const getMyPosts = async (
   req: any,
   res: Response,
   next: NextFunction
 ) => {
-  console.log("my user id is", req.user.id);
-  const { take, skip } = req.query;
+  const { skip, take } = req.query;
   try {
     const posts = await prisma.post.findMany({
+      where: {
+        userId: req.user.id,
+      },
       select: {
         like: {
           select: {
@@ -27,7 +27,6 @@ export const getAllPosts = async (
         photoUri: true,
         videoViews: true,
         userId: true,
-        videoThumbnail: true,
 
         user: {
           select: {
@@ -53,21 +52,10 @@ export const getAllPosts = async (
       take: Number(take),
       skip: Number(skip),
     });
-
+    console.log("🚀 ~ file: getMyPosts.ts:55 ~ posts:", posts);
     if (posts) {
-      const updatedPosts = [];
-
-      for (let i in posts) {
-        updatedPosts.push({
-          ...posts[i],
-          isLiked: posts[i].like.some((i) => i.userId === req.user.id),
-        });
-      }
-
-      return res.status(200).json({ posts: updatedPosts });
+      res.status(200).json({ posts });
     }
-
-    throw new Error("Error in trying get posts");
   } catch (e) {
     next(e);
   }
