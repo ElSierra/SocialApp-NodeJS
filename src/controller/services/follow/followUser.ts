@@ -15,36 +15,78 @@ export const followUser = async (
   if (id === req.query.id) {
     return res.status(200).json({ msg: "can't follow self" });
   }
-
   try {
-    const userWithFollower = await prisma.user.update({
+    const user = await prisma.user.findUnique({
       where: {
         id,
       },
-      data: {
-        following: {
-          connect: {
-            id: req.query?.id,
-          },
-        },
+      select: {
+        followingIDs: true,
       },
     });
 
-    if (userWithFollower) {
-      const userFollow = updateFollowerCounts(req.user.id);
+    console.log("includes id", user?.followingIDs.includes(req.query.id));
+    if (user?.followingIDs.includes(req.query.id)) {
+      const userWithUnFollow = await prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          following: {
+            disconnect: {
+              id: req.query?.id,
+            },
+          },
+        },
+      });
 
-      const guestFollow = updateFollowerCounts(req.query?.id);
-      Promise.all([userFollow, guestFollow])
-        .then((values) => {
-          return res.status(200).json({
-            msg: "followed",
+      if (userWithUnFollow) {
+        const userFollow = updateFollowerCounts(req.user.id);
+
+        const guestFollow = updateFollowerCounts(req.query?.id);
+        Promise.all([userFollow, guestFollow])
+          .then((values) => {
+            return res.status(200).json({
+              msg: "unfollowed",
+            });
+          })
+          .catch((e) => {
+            return res.status(200).json({
+              msg: "unfollowed",
+            });
           });
-        })
-        .catch((e) => {
-          return res.status(200).json({
-            msg: "followed",
+      }
+      return;
+    } else {
+      const userWithFollower = await prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          following: {
+            connect: {
+              id: req.query?.id,
+            },
+          },
+        },
+      });
+
+      if (userWithFollower) {
+        const userFollow = updateFollowerCounts(req.user.id);
+
+        const guestFollow = updateFollowerCounts(req.query?.id);
+        Promise.all([userFollow, guestFollow])
+          .then((values) => {
+            return res.status(200).json({
+              msg: "followed",
+            });
+          })
+          .catch((e) => {
+            return res.status(200).json({
+              msg: "followed",
+            });
           });
-        });
+      }
     }
   } catch (e) {
     next(e);

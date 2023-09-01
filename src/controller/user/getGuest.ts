@@ -1,10 +1,24 @@
 import { Response, NextFunction } from "express";
 import prisma from "../../lib/prisma/init";
 
-export const getUser = async (req: any, res: Response, next: NextFunction) => {
-  const { id } = req?.user;
+export const getGuest = async (req: any, res: Response, next: NextFunction) => {
+  console.log('CALLING GUEST')
+  const { id } = req?.query;
 
   try {
+    const loggedInUser = await prisma.user.findUnique({
+      where: {
+        id: req.user.id,
+      },
+      select: {
+        followingIDs: true,
+      },
+    });
+    if (!loggedInUser) {
+      return res.json({ error: "error" });
+    }
+    const isFollowed = loggedInUser.followingIDs.includes(req.query.id);
+    console.log("🚀 ~ file: getGuest.ts:20 ~ getGuest ~ isFollowed:", isFollowed)
     const user = await prisma.user.findUnique({
       where: {
         id,
@@ -13,13 +27,13 @@ export const getUser = async (req: any, res: Response, next: NextFunction) => {
         name: true,
         followers: true,
         userName: true,
-        id: true,
         followersCount: true,
         followingCount: true,
         email: true,
         following: true,
         verified: true,
         imageUri: true,
+
         emailIsVerified: true,
       },
     });
@@ -30,7 +44,6 @@ export const getUser = async (req: any, res: Response, next: NextFunction) => {
         imageUri,
         emailIsVerified,
         name,
-        id,
         verified,
         followersCount,
         followingCount,
@@ -43,9 +56,9 @@ export const getUser = async (req: any, res: Response, next: NextFunction) => {
           emailIsVerified,
           verified,
           name,
-          id,
           followersCount: followersCount?.toString(),
           followingCount: followingCount?.toString(),
+          isFollowed,
         },
       });
     }

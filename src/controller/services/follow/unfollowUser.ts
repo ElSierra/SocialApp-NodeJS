@@ -30,12 +30,12 @@ export const unfollowUser = async (
         .then(() => console.log("Follower counts updated"))
         .catch((error) =>
           console.error("Error updating follower counts:", error)
-        )
-        updateFollowerCounts(req.query?.id)
+        );
+      updateFollowerCounts(req.query?.id)
         .then(() => console.log("Follower counts updated"))
         .catch((error) =>
           console.error("Error updating follower counts:", error)
-        )
+        );
     }
     return res.status(200).json({
       msg: "unfollowed",

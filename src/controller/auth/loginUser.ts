@@ -33,6 +33,7 @@ export async function loginUser(req: any, res: Response, next: NextFunction) {
         emailIsVerified,
         name,
         followersCount,
+        id,
         followingCount,
       } = user;
       if (await compareHashedPassword(password, user.password)) {
@@ -49,6 +50,7 @@ export async function loginUser(req: any, res: Response, next: NextFunction) {
             imageUri,
             emailIsVerified,
             name,
+            id,
             verified,
             followersCount: followersCount?.toString(),
             followingCount: followingCount?.toString(),

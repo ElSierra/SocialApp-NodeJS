@@ -32,7 +32,8 @@ import { postComment } from "../../controller/services/posts/postComment";
 import { getCommentByPost } from "../../controller/services/posts/getCommentsByPost";
 import { getPostByFollowing } from "../../controller/services/posts/getPostByFollowing";
 import { getMyPosts } from "../../controller/services/posts/getMyPosts";
-import { updatePhoto } from "../../controller/user/updatePhoto";
+import { getGuestPosts } from "../../controller/services/posts/getGuestPosts";
+
 
 const router = Router();
 const isProduction = config.stage === "production";
@@ -81,5 +82,6 @@ router.get(
   getPostByFollowing
 );
 router.get("/my-posts", getPostsValidator, handleErrors, getMyPosts);
+router.get("/guest-posts", getPostsValidator, handleErrors, getGuestPosts);
 
 export default router;
