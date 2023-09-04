@@ -30,31 +30,34 @@ model User {
   following       User[]    @relation("UserFollows", fields: [followingIDs], references: [id])
   followingIDs    String[]  @db.ObjectId
   comments        Comment[]
+  chat            Chat[]    @relation(fields: [chatIDs], references: [id])
+  chatIDs         String[]  @db.ObjectId
   like            Like[]
+  Message         Message[]
 }
 
 model Post {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  user       User?     @relation(fields: [userId], references: [id])
-  userId     String?   @db.ObjectId
-  audioUri   String?
-  audioTitle String?
-  videoUri   String?
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  user           User?     @relation(fields: [userId], references: [id])
+  userId         String?   @db.ObjectId
+  audioUri       String?
+  audioTitle     String?
+  videoUri       String?
   videoThumbnail String?
-  comments   Comment[]
-  videoTitle String?
-  photoUri   String[]
-  postText   String?
-  videoViews String?
-  createdAt  DateTime? @default(now())
-  updatedAt  DateTime? @updatedAt
-  like       Like[]
+  comments       Comment[]
+  videoTitle     String?
+  photoUri       String[]
+  postText       String?
+  videoViews     String?
+  createdAt      DateTime? @default(now())
+  updatedAt      DateTime? @updatedAt
+  like           Like[]
 }
 
 model Like {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
-  post      Post?    @relation(fields: [postId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId    String   @db.ObjectId
   postId    String?  @db.ObjectId
   commentId String?  @db.ObjectId
@@ -68,6 +71,27 @@ model Comment {
   post      Post?    @relation(fields: [postId], references: [id])
   postId    String?  @db.ObjectId
   userId    String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Chat {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  messagesIds String[]  @db.ObjectId
+  messages    Message[]
+  userIds     String[]  @db.ObjectId
+  users       User[]    @relation(fields: [userIds], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Message {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  text      String
+  chat      Chat?    @relation(fields: [chatId], references: [id])
+  chatId    String?  @db.ObjectId
+  senderId  String   @db.ObjectId
+  sender    User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

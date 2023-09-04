@@ -10,7 +10,11 @@ import { ErrorHandler } from "./controller/error/ErrorHandler";
 import user from "./routes/user";
 import http from "http";
 import helmet from "helmet";
-import { apiLimiter, authRateLimiter } from "./middleware/validation/rateLimiter";
+import {
+  apiLimiter,
+  authRateLimiter,
+} from "./middleware/validation/rateLimiter";
+import chat from "./routes/chat";
 
 const app = express();
 const server = http.createServer(app);
@@ -22,9 +26,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(apiLimiter);
 app.use("/api", globalRouter);
 
-app.use("/api/auth",authRateLimiter, authRouter);
+app.use("/api/auth", authRateLimiter, authRouter);
 
 app.use("/api/services", blockJWT, protect, services);
 app.use("/api/user", blockJWT, protect, user);
+app.use("/api/chat", blockJWT, protect, chat);
 app.use(ErrorHandler);
 export default server;
