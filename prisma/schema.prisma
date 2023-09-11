@@ -87,7 +87,8 @@ model Chat {
 
 model Message {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  text      String
+  text      String?
+  photoUri  String?
   chat      Chat?    @relation(fields: [chatId], references: [id])
   chatId    String?  @db.ObjectId
   senderId  String   @db.ObjectId

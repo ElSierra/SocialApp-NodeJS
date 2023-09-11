@@ -1,7 +1,7 @@
 import prisma from "../../lib/prisma/init";
 
-export const addMessages = async (
-  text: string,
+export const addPhoto = async (
+  photoUri: string,
   chatId: string,
   id: string,
   senderId: string
@@ -15,10 +15,10 @@ export const addMessages = async (
         updatedAt: new Date(),
       },
     });
-    console.log("🚀 ~ file: addMessages.ts:18 ~ chat:", chat)
+    console.log("🚀 ~ file: addMessages.ts:18 ~ chat:", chat);
     const messages = await prisma.message.create({
       data: {
-        text,
+        photoUri,
         id,
         senderId,
         chatId,

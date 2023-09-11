@@ -28,9 +28,10 @@ export const getChatList = async (
           },
         },
         messages: {
-          orderBy:{createdAt:"desc"},
+          orderBy: { createdAt: "desc" },
           select: {
             text: true,
+            photoUri: true,
             sender: {
               select: {
                 userName: true,
@@ -41,6 +42,9 @@ export const getChatList = async (
             createdAt: true,
           },
         },
+      },
+      orderBy: {
+        updatedAt: "desc",
       },
     });
     if (chatList) {

@@ -6,6 +6,84 @@ export const startChatSocket = async (
   receiverId: string
 ) => {
   try {
+    if (authUserId === receiverId) {
+      const myExistingChat = await prisma.chat.findMany({
+        where: {
+          userIds: {
+            equals: [authUserId],
+          },
+        },
+        select: {
+          id: true,
+          users: {
+            select: {
+              userName: true,
+              name: true,
+              imageUri: true,
+              id: true,
+            },
+          },
+          messages: {
+            select: {
+              text: true,
+              sender: {
+                select: {
+                  id: true,
+                  userName: true,
+                },
+              },
+              id: true,
+              createdAt: true,
+            },
+          },
+        },
+      });
+      if (myExistingChat) {
+        const chat = {
+          ...myExistingChat[0],
+          isNew: false,
+          senderId: authUserId,
+        };
+        return chat;
+      }
+      const myNewChat = await prisma.chat.create({
+        data: {
+          users: {
+            connect: [{ id: authUserId }],
+          },
+        },
+        select: {
+          id: true,
+          users: {
+            select: {
+              userName: true,
+              name: true,
+              imageUri: true,
+              id: true,
+            },
+          },
+          messages: {
+            select: {
+              text: true,
+              sender: {
+                select: {
+                  id: true,
+                  userName: true,
+                },
+              },
+              id: true,
+              createdAt: true,
+            },
+          },
+        },
+      });
+      const chat = {
+        ...myNewChat,
+        isNew: false,
+        senderId: authUserId,
+      };
+      return chat;
+    }
     const existingChat = await prisma.chat.findMany({
       where: {
         OR: [
@@ -47,11 +125,7 @@ export const startChatSocket = async (
       },
     });
     if (existingChat[0]) {
-      console.log("old chat");
-      const users = existingChat[0].users.filter(
-        (exChat) => exChat.id !== authUserId
-      );
-      const chat = { ...existingChat[0], users, isNew: false };
+      const chat = { ...existingChat[0], isNew: false, senderId: authUserId };
       return chat;
     }
     const newChat = await prisma.chat.create({
@@ -86,8 +160,8 @@ export const startChatSocket = async (
       },
     });
     console.log("new chat");
-    const users = newChat.users.filter((exChat) => exChat.id !== authUserId);
-    const chat = { ...newChat, users, isNew: true };
+
+    const chat = { ...newChat, isNew: true, senderId: authUserId };
     return chat;
   } catch (e) {
     return e;
