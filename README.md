@@ -23,6 +23,8 @@ Check out the React Native App - <https://github.com/ElSierra/Social-app-React-N
 
 ## Getting Started
 
+ NOTE: ffmpeg must be installed on your machine
+  
 1. Clone this repository: `git clone https://github.com/ElSierra/SocialApp-NodeJS`
 2. Navigate to the project directory: `cd SocialApp-NodeJS`
 3. Install dependencies: `npm install`

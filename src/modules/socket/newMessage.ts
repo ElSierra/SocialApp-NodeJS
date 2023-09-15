@@ -5,6 +5,7 @@ import { getReceiverNotificationToken } from "../../controller/chat/getReceiverN
 import Expo from "expo-server-sdk";
 import expo from "../../lib/expo/init";
 import { getOnlineList } from "../../controller/chat/getOnlineList";
+import { onlineState } from "../onlineUsers";
 
 export const newMessage = async (
   data: any,
@@ -16,13 +17,13 @@ export const newMessage = async (
   IO.to(data.chatId).emit("message", data);
   socket.emit("sent", true);
   addMessages(data.message.text, data.chatId, data.id, id).then((e) => {});
-  const onlineUsers: any = await getOnlineList();
+  const onlineUsers = onlineState.getValues();
 
   console.log("🚀 ~ file: newMessage.ts:20 ~ onlineUsers:", onlineUsers);
   getReceiverNotificationToken(data.chatId, id)
     .then((r: any) => {
-      if (onlineUsers.contains(r.userId)) {
-        console.log("⚠️⚠️⚠️")
+      if (onlineUsers.includes(r.userId)) {
+        console.log("⚠️⚠️⚠️");
         return;
       }
       console.log("🚀 ~ file: socket.ts:129 ~ .then ~ r:", r);

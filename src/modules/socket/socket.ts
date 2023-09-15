@@ -3,23 +3,19 @@ import app from "../../app";
 import jwt from "jsonwebtoken";
 import { userCollection } from "../../lib/mongodb/init";
 import { ChangeStream, ObjectId } from "mongodb";
-import prisma from "../../lib/prisma/init";
+
 import { startChatSocket } from "../../controller/chat/startChatSocket";
-import { Chat } from "@prisma/client";
-import { addMessages } from "../../controller/chat/addMessages";
-import { addToRedis } from "../../controller/chat/addOnlineList";
-import { removeFromRedis } from "../../controller/chat/removeOnlineList";
+
 import { deleteMessage } from "../../controller/chat/deleteMessage";
 import { addPhoto } from "../../controller/chat/addPhoto";
-import { Expo } from "expo-server-sdk";
-import { getReceiverNotificationToken } from "../../controller/chat/getReceiverNotificationToken";
-import expo from "../../lib/expo/init";
+
 import { newMessage } from "./newMessage";
+import { onlineState } from "../onlineUsers";
 
 const IO = new Server(app);
 
 //TODO: CHANGE TO REDIS
-const onlineUsers: Array<string> = [];
+
 
 IO.use((socket, next) => {
   const token = socket.handshake?.auth?.token;
@@ -52,24 +48,14 @@ IO.on("connection", async (socket) => {
   // if (!isAlreadyLoaded) {
   //   onlineUsers.push(id);
   // }
-  addToRedis(id)
-    .then((r) => {
-      IO.emit("online", r);
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+
+  onlineState.addValue(id);
+  IO.emit("online", onlineState.getValues());
 
   socket.on("disconnect", async () => {
     socket.disconnect();
-    removeFromRedis(id)
-      .then((r) => {
-        console.log("🚀 ~ file: socket.ts:61 ~ removeFromRedis ~ r:", r);
-        IO.emit("online", r);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    onlineState.deleteValue(id);
+    IO.emit("online", onlineState.getValues());
     console.log("🔥: A user disconnected");
   });
   socket.on("followedStatus", () => {
