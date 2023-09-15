@@ -13,6 +13,7 @@ export const addToRedis = async (id: string) => {
         return onlineUsers;
       }
     } else {
+      console.log("👺👺👺👺👺 user exists")
       // If the ID is already in the list, return an error or handle it as needed
       return existingIds;
     }

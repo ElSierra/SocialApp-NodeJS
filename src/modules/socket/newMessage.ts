@@ -1,0 +1,47 @@
+import { Socket } from "socket.io";
+import IO from "./socket";
+import { addMessages } from "../../controller/chat/addMessages";
+import { getReceiverNotificationToken } from "../../controller/chat/getReceiverNotificationToken";
+import Expo from "expo-server-sdk";
+import expo from "../../lib/expo/init";
+import { getOnlineList } from "../../controller/chat/getOnlineList";
+
+export const newMessage = async (
+  data: any,
+  socket: Socket,
+  id: string,
+  userName: string
+) => {
+  console.log("🚀 ~ file: socket.ts:76 ~ socket.on ~ data:", data);
+  IO.to(data.chatId).emit("message", data);
+  socket.emit("sent", true);
+  addMessages(data.message.text, data.chatId, data.id, id).then((e) => {});
+  const onlineUsers: any = await getOnlineList();
+
+  console.log("🚀 ~ file: newMessage.ts:20 ~ onlineUsers:", onlineUsers);
+  getReceiverNotificationToken(data.chatId, id)
+    .then((r: any) => {
+      if (onlineUsers.contains(r.userId)) {
+        console.log("⚠️⚠️⚠️")
+        return;
+      }
+      console.log("🚀 ~ file: socket.ts:129 ~ .then ~ r:", r);
+      if (!Expo.isExpoPushToken(r.notificationId)) {
+        return;
+      }
+      expo.sendPushNotificationsAsync([
+        {
+          to: r.notificationId,
+          sound: "default",
+          title: `@${userName}`,
+          body: data.message.text,
+          subtitle: "sent a message",
+          data: {
+            chatId: data.chatId,
+            url: `qui-ojo://messages/${data.chatId}`,
+          },
+        },
+      ]);
+    })
+    .catch((e) => console.log(e));
+};

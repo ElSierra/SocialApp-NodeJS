@@ -98,13 +98,17 @@ export const getPostsValidator = [
 ];
 export const likeValidator = [
   query("id").exists().isMongoId().withMessage("Not valid Id"),
-]
+];
 
 export const postCommentValidator = [
   body("id").exists().isMongoId().withMessage("Not valid Id"),
-  body("comment").exists().isString().withMessage("Comment must be valid")
-]
+  body("comment").exists().isString().withMessage("Comment must be valid"),
+];
 
 export const getCommentValidator = [
   query("id").exists().isMongoId().withMessage("Not valid Id"),
-]
+];
+
+export const notifIdValidator = [
+  query("notificationId").exists().withMessage("Not valid Id"),
+];

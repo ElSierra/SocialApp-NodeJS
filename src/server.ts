@@ -4,8 +4,8 @@ import app from "./app";
 import notifier from "node-notifier";
 import config from "./config/env";
 import { Socket } from "socket.io";
-import io from "./modules/socket";
-import IO from "./modules/socket";
+import io from "./modules/socket/socket";
+import IO from "./modules/socket/socket";
 import redis from "./lib/redis/init";
 
 process.on("uncaughtException", () => {});

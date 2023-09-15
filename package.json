@@ -41,6 +41,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "latest",
     "dotenv": "latest",
+    "expo-server-sdk": "^3.7.0",
     "express": "latest",
     "express-rate-limit": "^6.9.0",
     "express-validator": "^7.0.1",

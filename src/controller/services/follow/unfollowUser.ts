@@ -1,5 +1,5 @@
 import prisma from "../../../lib/prisma/init";
-import updateFollowerCounts from "../../../modules/updateFollows";
+import updateFollowerCounts from "../../../modules/socket/updateFollows";
 import { User } from ".prisma/client";
 import { NextFunction, Response } from "express";
 

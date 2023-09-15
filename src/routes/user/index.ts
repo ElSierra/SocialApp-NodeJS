@@ -6,6 +6,7 @@ import config from "../../config/env";
 import { upload, uploadOcean } from "../../config/multer";
 import { updatePhoto } from "../../controller/user/updatePhoto";
 import { getGuest } from "../../controller/user/getGuest";
+import { saveNotificationId } from "../../controller/user/saveNotificationId";
 
 const isProduction = config.stage === "production";
 const router = Router();
@@ -22,4 +23,5 @@ router.post(
     : upload.single("photo"),
   updatePhoto
 );
+router.put("/update-notification-id", saveNotificationId);
 export default router;

@@ -1,6 +1,6 @@
 import { query } from "express-validator";
 import prisma from "../../../lib/prisma/init";
-import updateFollowerCounts from "../../../modules/updateFollows";
+import updateFollowerCounts from "../../../modules/socket/updateFollows";
 import { User } from "./../../../../node_modules/.prisma/client/index.d";
 import { NextFunction, Response } from "express";
 
