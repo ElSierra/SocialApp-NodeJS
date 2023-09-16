@@ -20,6 +20,7 @@
     "@types/express": "latest",
     "@types/ffmpeg": "^1.0.4",
     "@types/fluent-ffmpeg": "^2.1.21",
+    "@types/gifsicle": "^5.2.0",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/lodash.merge": "^4.6.7",
     "@types/morgan": "latest",
@@ -35,7 +36,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.400.0",
     "@aws-sdk/s3-request-presigner": "^3.400.0",
-    "@prisma/client": "^5.2.0",
+    "@prisma/client": "^5.3.1",
     "bcrypt": "^5.1.0",
     "body-parser": "latest",
     "cookie-parser": "^1.4.6",
@@ -58,7 +59,7 @@
     "node-notifier": "^10.0.1",
     "prisma": "^5.1.1",
     "redis": "^4.6.8",
-    "sharp": "^0.32.4",
+    "sharp": "^0.32.5",
     "socket.io": "^4.7.2",
     "uuid": "^9.0.0"
   }

@@ -11,11 +11,11 @@ import { addPhoto } from "../../controller/chat/addPhoto";
 
 import { newMessage } from "./newMessage";
 import { onlineState } from "../onlineUsers";
+import { followStatusEmit } from "./followStatus";
 
 const IO = new Server(app);
 
 //TODO: CHANGE TO REDIS
-
 
 IO.use((socket, next) => {
   const token = socket.handshake?.auth?.token;
@@ -59,36 +59,7 @@ IO.on("connection", async (socket) => {
     console.log("🔥: A user disconnected");
   });
   socket.on("followedStatus", () => {
-    console.log("yes");
-    try {
-      const changeStream = userCollection.watch([
-        {
-          $match: {
-            "documentKey._id": new ObjectId(id),
-          },
-        },
-      ]);
-
-      changeStream.on("change", (change: any) => {
-        if (change.updateDescription?.updatedFields?.followingCount) {
-          //console.log(change); // Change object
-          socket.emit(
-            "following",
-            change?.updateDescription?.updatedFields?.followingCount
-          );
-        }
-
-        socket.emit(
-          "followers",
-          change?.updateDescription?.updatedFields?.followersCount
-        );
-
-        console.log(
-          "🚀",
-          change?.updateDescription?.updatedFields?.followingCount
-        );
-      });
-    } catch (e) {}
+    followStatusEmit(id, socket);
   });
   socket.on("startChat", async (receiverId) => {
     try {
@@ -142,6 +113,16 @@ IO.on("connection", async (socket) => {
       id,
       isTyping,
     });
+  });
+  socket.on("away", () => {
+    console.log(`${id} is now away`);
+    onlineState.deleteValue(id);
+    IO.emit("online", onlineState.getValues());
+  });
+  socket.on("online", () => {
+    console.log(`${id} is now online`);
+    onlineState.addValue(id);
+    IO.emit("online", onlineState.getValues());
   });
 });
 

@@ -14,7 +14,7 @@ export const updatePhoto = async (
           id: req.user.id,
         },
         data: {
-          imageUri: req.file.location,
+          imageUri: req.imageUri,
         },
       });
       if (photos) {

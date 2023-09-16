@@ -11,30 +11,32 @@ datasource db {
 }
 
 model User {
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  email           String    @unique
-  name            String
-  notificationId  String?
-  userName        String    @unique
-  password        String
-  verified        Boolean   @default(false)
-  emailIsVerified Boolean   @default(false)
-  prefs           Json?
-  imageUri        String?
-  post            Post[]
-  followingCount  BigInt?   @default(0)
-  followersCount  BigInt?   @default(0)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  followers       User[]    @relation("UserFollows", fields: [followersIDs], references: [id])
-  followersIDs    String[]  @db.ObjectId
-  following       User[]    @relation("UserFollows", fields: [followingIDs], references: [id])
-  followingIDs    String[]  @db.ObjectId
-  comments        Comment[]
-  chat            Chat[]    @relation(fields: [chatIDs], references: [id])
-  chatIDs         String[]  @db.ObjectId
-  like            Like[]
-  Message         Message[]
+  id                    String         @id @default(auto()) @map("_id") @db.ObjectId
+  email                 String         @unique
+  name                  String
+  notificationId        String?
+  userName              String         @unique
+  password              String
+  verified              Boolean        @default(false)
+  emailIsVerified       Boolean        @default(false)
+  prefs                 Json?
+  imageUri              String?
+  post                  Post[]
+  followingCount        BigInt?        @default(0)
+  followersCount        BigInt?        @default(0)
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  followers             User[]         @relation("UserFollows", fields: [followersIDs], references: [id])
+  followersIDs          String[]       @db.ObjectId
+  following             User[]         @relation("UserFollows", fields: [followingIDs], references: [id])
+  followingIDs          String[]       @db.ObjectId
+  comments              Comment[]
+  chat                  Chat[]         @relation(fields: [chatIDs], references: [id])
+  chatIDs               String[]       @db.ObjectId
+  like                  Like[]
+  Message               Message[]
+  notification          Notification[]
+  notificationsReceived Notification[] @relation("NotificationUser")
 }
 
 model Post {
@@ -96,4 +98,26 @@ model Message {
   sender    User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Notification {
+  id          String           @id @default(auto()) @map("_id") @db.ObjectId
+  text        String
+  imageUri    String?
+  to          String?
+  type        NotificationType
+  notifUser   User?            @relation("NotificationUser", fields: [notifUserId], references: [id])
+  notifUserId String?          @db.ObjectId
+  remindDate  DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  User        User?            @relation(fields: [userId], references: [id])
+  userId      String?          @db.ObjectId
+}
+
+enum NotificationType {
+  Follow
+  Posts
+  Suggestions
+  Reminder
 }

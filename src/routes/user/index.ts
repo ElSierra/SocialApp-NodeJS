@@ -7,6 +7,8 @@ import { upload, uploadOcean } from "../../config/multer";
 import { updatePhoto } from "../../controller/user/updatePhoto";
 import { getGuest } from "../../controller/user/getGuest";
 import { saveNotificationId } from "../../controller/user/saveNotificationId";
+import { getNotifications } from "../../controller/user/getNotifications";
+import { profilePhotoUpload } from "../../modules/handlePhotoUpload/profilePhotoUpload";
 
 const isProduction = config.stage === "production";
 const router = Router();
@@ -16,11 +18,21 @@ router.get("/get-follows", getFollows);
 router.get("/token-valid", (req: any, res: Response, next: NextFunction) => {
   res.json({ msg: true });
 });
+router.get("/get-notifications", getNotifications);
+// router.post(
+//   "/update-photo",
+
+//   isProduction && uploadOcean
+//     ? uploadOcean.single("photo")
+//     : upload.single("photo"),
+
+//   updatePhoto
+// );
+
 router.post(
   "/update-photo",
-  isProduction && uploadOcean
-    ? uploadOcean.single("photo")
-    : upload.single("photo"),
+  upload.single("photo"),
+  profilePhotoUpload,
   updatePhoto
 );
 router.put("/update-notification-id", saveNotificationId);

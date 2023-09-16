@@ -15,6 +15,7 @@ export const newMessage = async (
 ) => {
   console.log("🚀 ~ file: socket.ts:76 ~ socket.on ~ data:", data);
   IO.to(data.chatId).emit("message", data);
+  IO.to(data.chatId).emit("newMsg", data);
   socket.emit("sent", true);
   addMessages(data.message.text, data.chatId, data.id, id).then((e) => {});
   const onlineUsers = onlineState.getValues();
@@ -34,8 +35,8 @@ export const newMessage = async (
         {
           to: r.notificationId,
           sound: "default",
-          title: `@${userName}`,
-          body: data.message.text,
+          title: `👌new message`,
+          body: `@${userName}: ${data.message.text}`,
           subtitle: "sent a message",
           data: {
             chatId: data.chatId,
