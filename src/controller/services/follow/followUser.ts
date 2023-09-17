@@ -99,7 +99,7 @@ export const followUser = async (
         );
         if (
           isMultipleOf10((followedUser?.followingIDs?.length || 0) + 1) ||
-          (followedUser?.followingIDs?.length || 0) >= 9
+          (followedUser?.followingIDs?.length || 0) <= 9
         ) {
           if (!Expo.isExpoPushToken(followedUser?.notificationId)) {
             return;

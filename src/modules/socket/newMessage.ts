@@ -35,9 +35,12 @@ export const newMessage = async (
         {
           to: r.notificationId,
           sound: "default",
-          title: `👌new message`,
-          body: `@${userName}: ${data.message.text}`,
+          badge: 1,
+          mutableContent:true,
+          title: `@${userName}`,
+          body: `${data.message.text}`,
           subtitle: "sent a message",
+          categoryId:"message",
           data: {
             chatId: data.chatId,
             url: `qui-ojo://messages/${data.chatId}`,

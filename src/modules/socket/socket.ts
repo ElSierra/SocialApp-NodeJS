@@ -72,11 +72,11 @@ IO.on("connection", async (socket) => {
     } catch (e) {}
   });
 
-  socket.on("chat", async (id) => {
+  socket.on("chat", async (id: string[]) => {
     console.log("🚀 ~ file: socket.ts:73 ~ socket.on ~ id:", id);
     socket.join(id);
 
-    IO.to(id).emit("isOnline", { id, isOnline: true });
+    //IO.to(id).emit("isOnline", { id, isOnline: true });
   });
   socket.on(
     "newMessage",

@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import sharp from "sharp";
 import { s3Config } from "../../config/multer/digitalOcean";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { readFileSync } from "fs";
+import { readFileSync, unlink } from "fs";
 
 export const profilePhotoUpload = (
   req: any,
@@ -28,6 +28,7 @@ export const profilePhotoUpload = (
           const filetoUpload = readFileSync(
             `./uploads/${photo?.filename.split(".")[0]}-sm.gif`
           );
+
           console.log(
             "🚀 ~ file: profilePhotoUpload.ts:24 ~ filetoUpload:",
             filetoUpload
@@ -45,7 +46,19 @@ export const profilePhotoUpload = (
             req.imageUri = `https://quick-chop.nyc3.cdn.digitaloceanspaces.com/${
               photo?.filename.split(".")[0]
             }-sm.gif`;
-
+            unlink(
+              `./uploads/${photo?.filename.split(".")[0]}-sm.gif`,
+              (err) => {
+                if (err) {
+                  console.log("failed to delete");
+                }
+              }
+            );
+            unlink(`./uploads/${photo?.filename}`, (err) => {
+              if (err) {
+                console.log(err,"failed to delete");
+              }
+            });
             return next();
           }
         }
@@ -81,7 +94,19 @@ export const profilePhotoUpload = (
             req.imageUri = `https://quick-chop.nyc3.cdn.digitaloceanspaces.com/${
               photo?.filename.split(".")[0]
             }-sm.jpg`;
-
+            unlink(
+              `./uploads/${photo?.filename.split(".")[0]}-sm.jpg`,
+              (err) => {
+                if (err) {
+                  console.log("failed to delete");
+                }
+              }
+            );
+            unlink(`./uploads/${photo?.filename}`, (err) => {
+              if (err) {
+                console.log("failed to delete");
+              }
+            });
             return next();
           }
         }
