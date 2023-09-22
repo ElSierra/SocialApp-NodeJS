@@ -9,7 +9,16 @@ export const getMyPosts = async (
   try {
     const posts = await prisma.post.findMany({
       where: {
-        userId: req.user.id,
+        OR: [
+          {
+            userId: req.user.id,
+          },
+          {
+            repostUserId: {
+              hasSome: [req.user.id],
+            },
+          },
+        ],
       },
       select: {
         like: {
@@ -27,6 +36,15 @@ export const getMyPosts = async (
         photoUri: true,
         videoViews: true,
         userId: true,
+
+        repostUser: {
+          select: {
+            id: true,
+          },
+          where: {
+            id: req.user.id,
+          },
+        },
 
         user: {
           select: {

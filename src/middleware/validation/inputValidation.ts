@@ -112,3 +112,8 @@ export const getCommentValidator = [
 export const notifIdValidator = [
   query("notificationId").exists().withMessage("Not valid Id"),
 ];
+
+export const followerFollowingValidator = [
+  query("take").exists().isNumeric().withMessage("produce posts to take"),
+  query("skip").exists().isNumeric().withMessage("produce skip to take"),
+];

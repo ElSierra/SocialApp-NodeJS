@@ -16,6 +16,9 @@ export const getAllPosts = async (
           select: {
             userId: true,
           },
+          where: {
+            userId: req.user.id,
+          },
         },
         createdAt: true,
         postText: true,
@@ -28,6 +31,15 @@ export const getAllPosts = async (
         videoViews: true,
         userId: true,
         videoThumbnail: true,
+
+        repostUser: {
+          select: {
+            id: true,
+          },
+          where: {
+            id: req.user.id,
+          },
+        },
 
         user: {
           select: {
@@ -42,6 +54,7 @@ export const getAllPosts = async (
           select: {
             like: true,
             comments: true,
+            repostUser: true,
           },
         },
       },
@@ -55,16 +68,7 @@ export const getAllPosts = async (
     });
 
     if (posts) {
-      const updatedPosts = [];
-
-      for (let i in posts) {
-        updatedPosts.push({
-          ...posts[i],
-          isLiked: posts[i].like.some((i) => i.userId === req.user.id),
-        });
-      }
-
-      return res.status(200).json({ posts: updatedPosts });
+      return res.status(200).json({ posts });
     }
 
     throw new Error("Error in trying get posts");

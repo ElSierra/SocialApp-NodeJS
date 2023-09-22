@@ -17,10 +17,29 @@ export const getPostByFollowing = async (
     if (followedUserIds) {
       const postsByFollowing = await prisma.post.findMany({
         where: {
-          userId: {
-            in: followedUserIds.followingIDs,
-          },
+          OR: [
+            {
+              userId: {
+                in: followedUserIds.followingIDs,
+              },
+            },
+            {
+              repostUserId: {
+                hasSome: followedUserIds.followingIDs,
+              },
+            },
+            {
+              like: {
+                some: {
+                  userId: {
+                    in: followedUserIds.followingIDs,
+                  },
+                },
+              },
+            },
+          ],
         },
+
         select: {
           like: {
             select: {
@@ -37,7 +56,14 @@ export const getPostByFollowing = async (
           photoUri: true,
           videoViews: true,
           userId: true,
-
+          repostUser: {
+            select: {
+              id: true,
+            },
+            where: {
+              id: req.user.id,
+            },
+          },
           user: {
             select: {
               id: true,
@@ -51,6 +77,7 @@ export const getPostByFollowing = async (
             select: {
               like: true,
               comments: true,
+              repostUser: true,
             },
           },
         },
@@ -64,6 +91,10 @@ export const getPostByFollowing = async (
       });
 
       if (postsByFollowing) {
+        console.log(
+          "🚀 ~ file: getPostByFollowing.ts:86 ~ postsByFollowing:",
+          postsByFollowing
+        );
         return res.status(200).json({ posts: postsByFollowing });
       }
     }

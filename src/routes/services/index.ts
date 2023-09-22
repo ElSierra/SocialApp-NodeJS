@@ -7,6 +7,7 @@ import { handleErrors } from "./../../middleware/validation/handleErrors";
 import {
   createPostValidator,
   followValidator,
+  followerFollowingValidator,
   getCommentValidator,
   getPostsValidator,
   likeValidator,
@@ -33,6 +34,7 @@ import { getCommentByPost } from "../../controller/services/posts/getCommentsByP
 import { getPostByFollowing } from "../../controller/services/posts/getPostByFollowing";
 import { getMyPosts } from "../../controller/services/posts/getMyPosts";
 import { getGuestPosts } from "../../controller/services/posts/getGuestPosts";
+import { rePost } from "../../controller/services/posts/rePost";
 
 
 const router = Router();
@@ -83,5 +85,6 @@ router.get(
 );
 router.get("/my-posts", getPostsValidator, handleErrors, getMyPosts);
 router.get("/guest-posts", getPostsValidator, handleErrors, getGuestPosts);
+router.get("/re-post", followValidator, handleErrors, rePost);
 
 export default router;

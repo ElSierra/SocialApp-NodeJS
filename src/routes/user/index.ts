@@ -9,6 +9,10 @@ import { getGuest } from "../../controller/user/getGuest";
 import { saveNotificationId } from "../../controller/user/saveNotificationId";
 import { getNotifications } from "../../controller/user/getNotifications";
 import { profilePhotoUpload } from "../../modules/handlePhotoUpload/profilePhotoUpload";
+import { getFollowersList } from "../../controller/services/follow/getFollowersList";
+import { getFollowingList } from "../../controller/services/follow/getFollowingList";
+import { handleErrors } from "../../middleware/validation/handleErrors";
+import { followerFollowingValidator } from "../../middleware/validation/inputValidation";
 
 const isProduction = config.stage === "production";
 const router = Router();
@@ -36,4 +40,16 @@ router.post(
   updatePhoto
 );
 router.put("/update-notification-id", saveNotificationId);
+router.get(
+  "/get-following",
+  followerFollowingValidator,
+  handleErrors,
+  getFollowingList
+);
+router.get(
+  "/get-followers",
+  followerFollowingValidator,
+  handleErrors,
+  getFollowersList
+);
 export default router;

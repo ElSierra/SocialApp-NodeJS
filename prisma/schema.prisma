@@ -21,7 +21,9 @@ model User {
   emailIsVerified       Boolean        @default(false)
   prefs                 Json?
   imageUri              String?
-  post                  Post[]
+  post                  Post[]         @relation("User")
+  rePost                Post[]         @relation("RepostUser", fields: [rePostIDs], references: [id])
+  rePostIDs             String[]       @db.ObjectId
   followingCount        BigInt?        @default(0)
   followersCount        BigInt?        @default(0)
   createdAt             DateTime       @default(now())
@@ -41,8 +43,10 @@ model User {
 
 model Post {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
-  user           User?     @relation(fields: [userId], references: [id])
+  user           User?     @relation("User", fields: [userId], references: [id])
   userId         String?   @db.ObjectId
+  repostUser     User[]    @relation("RepostUser", fields: [repostUserId], references: [id])
+  repostUserId   String[]  @db.ObjectId
   audioUri       String?
   audioTitle     String?
   videoUri       String?
