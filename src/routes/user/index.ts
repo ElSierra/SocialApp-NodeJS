@@ -12,7 +12,11 @@ import { profilePhotoUpload } from "../../modules/handlePhotoUpload/profilePhoto
 import { getFollowersList } from "../../controller/services/follow/getFollowersList";
 import { getFollowingList } from "../../controller/services/follow/getFollowingList";
 import { handleErrors } from "../../middleware/validation/handleErrors";
-import { followerFollowingValidator } from "../../middleware/validation/inputValidation";
+import {
+  followerFollowingValidator,
+  updateDataValidator,
+} from "../../middleware/validation/inputValidation";
+import { changeUserName } from "../../controller/user/changeUserName";
 
 const isProduction = config.stage === "production";
 const router = Router();
@@ -52,4 +56,5 @@ router.get(
   handleErrors,
   getFollowersList
 );
+router.post("/update-data", updateDataValidator, handleErrors, changeUserName);
 export default router;

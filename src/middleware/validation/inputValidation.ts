@@ -117,3 +117,17 @@ export const followerFollowingValidator = [
   query("take").exists().isNumeric().withMessage("produce posts to take"),
   query("skip").exists().isNumeric().withMessage("produce skip to take"),
 ];
+
+export const updateDataValidator = [
+  body("password").exists().isString().withMessage("invalid password"),
+  body(["userName","newPassword","name"]).custom((value, { req }) => {
+    if (req.body.userName && !req.body.name && !req.body.newPassword) {
+      return true;
+    } else if (!req.body.userName && req.body.name && !req.body.newPassword) {
+      return true;
+    } else if (!req.body.userName && !req.body.name && req.body.newPassword) {
+      return true;
+    }
+    throw new Error("Either userName | newPassword | name is needed");
+  }),
+];

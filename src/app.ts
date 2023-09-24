@@ -1,3 +1,4 @@
+"use strict";
 import express from "express";
 import bodyParser from "body-parser";
 import morgan from "morgan";
@@ -15,12 +16,27 @@ import {
   authRateLimiter,
 } from "./middleware/validation/rateLimiter";
 import chat from "./routes/chat";
+import fs from "fs";
+import path from "path";
 
 const app = express();
 const server = http.createServer(app);
+server.headersTimeout = 5000;
+server.requestTimeout = 10000;
+
+morgan.token("id", (req: any) => {
+  //creating id token
+  return req.id;
+});
 app.use(cors());
 app.use(helmet());
-app.use(morgan("dev"));
+var accessLogStream = fs.createWriteStream(path.join("./", "access.log"), {
+  flags: "a",
+});
+
+// setup the logger
+app.use(morgan("combined", { stream: accessLogStream }));
+app.use(morgan("combined"));
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(apiLimiter);
