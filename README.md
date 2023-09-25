@@ -30,10 +30,11 @@ Check out the React Native App - [Qui React Native App](https://github.com/ElSie
 2. Navigate to the project directory: `cd SocialApp-NodeJS`
 3. Install dependencies: `npm install`
 4. Create a `.env` file in the root directory and set up your environment variables, such as database connection SECRET and DATABASE_URL (MongoDB Uri).
-5. Run the server:
+5. Run `npx prisma generate`
+6. Run the server:
    - Running in Development - `npm run dev:prod`
    - Running in Production - `npm run start`, for production, a couple of environment variables need to be set up: "SPACES_NAME, SPACES_SECRET, SPACES_ENDPOINT, SPACES_KEY" which are required for "AWS S3," REDIS_PASSWORD, REDIS_HOST, REDIS_PORT.
-6. The server will be running on `http://localhost:80` by default.
+7. The server will be running on `http://localhost:80` by default.
 
 ## API Endpoints
 

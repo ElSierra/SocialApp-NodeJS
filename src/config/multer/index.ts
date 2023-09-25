@@ -62,7 +62,7 @@ const fileFilterAudio = function (
   if (file.mimetype.startsWith("audio/")) {
     cb(null, true);
   } else {
-    cb(new Error("Invalid file type, only MP4 is supported"));
+    cb(new Error("Invalid file type, only audio is supported"));
   }
 };
 
