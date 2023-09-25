@@ -5,7 +5,7 @@ import {
   createHashedPassword,
 } from "../../middleware/auth";
 
-export const changeUserName = async (
+export const changeData = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -33,8 +33,10 @@ export const changeUserName = async (
           },
           data: {
             name: name || undefined,
-            password: (await createHashedPassword(password)) || undefined,
-            userName: userName || undefined,
+            password: newPassword
+              ? await createHashedPassword(newPassword)
+              : undefined,
+            userName: userName.trim() || undefined,
           },
         });
         if (updatedUser) {

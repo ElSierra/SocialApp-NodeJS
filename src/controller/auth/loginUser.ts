@@ -1,7 +1,12 @@
 import { NextFunction, Response } from "express";
 import prisma from "../../lib/prisma/init";
 import { compareHashedPassword, createJWT } from "../../middleware/auth";
-export async function loginUser(req: any, res: Response, next: NextFunction) {
+import { Request } from "express-validator/src/base";
+export async function loginUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const { userName, password }: { userName: string; password: string } =
     req.body;
   const formattedUserName = userName.toLowerCase();
@@ -42,6 +47,7 @@ export async function loginUser(req: any, res: Response, next: NextFunction) {
           id: user.id,
           verified: user.emailIsVerified,
         });
+        req.session.token = token;
         return res.status(200).json({
           token,
           data: {

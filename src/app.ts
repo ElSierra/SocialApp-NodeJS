@@ -18,16 +18,48 @@ import {
 import chat from "./routes/chat";
 import fs from "fs";
 import path from "path";
+import RedisStore from "connect-redis";
+import session from "express-session";
+import redis from "redis";
+import { createClient } from "redis";
+
+let redisClient = createClient({
+  password: process.env.REDIS_PASSWORD,
+  socket: {
+    host: process.env.REDIS_HOST,
+    port: Number(process.env.REDIS_PORT),
+  },
+});
+
+redisClient.connect().catch(console.error);
+redisClient.on("ready", () => {
+  console.log("Client is ready");
+  // redisClient.flushDb().then((e) => {
+  //   console.log("flush", e);
+  // });
+});
+
+redisClient.on("error", (err) => {
+  console.error("Error occurred:", err);
+});
+
+let redisStore = new RedisStore({
+  client: redisClient,
+  prefix: "qui:",
+});
 
 const app = express();
 const server = http.createServer(app);
+export const sessionMiddleWare = session({
+  secret: process.env.SECRET as string,
+  resave: false,
+  store: redisStore,
+  saveUninitialized: false,
+});
 server.headersTimeout = 5000;
 server.requestTimeout = 10000;
+app.use(sessionMiddleWare);
 
-morgan.token("id", (req: any) => {
-  //creating id token
-  return req.id;
-});
 app.use(cors());
 app.use(helmet());
 var accessLogStream = fs.createWriteStream(path.join("./", "access.log"), {

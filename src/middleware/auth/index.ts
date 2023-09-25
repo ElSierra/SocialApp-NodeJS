@@ -22,7 +22,6 @@ export const createJWT = (user: {
     { email: user.userName, id: user.id, verified: user.verified },
 
     process.env.SECRET || "",
-    { expiresIn: "7d" }
   );
 
   return token;
@@ -61,19 +60,27 @@ export const protect = (req: any, res: Response, next: NextFunction) => {
   }
 };
 
-export const blockJWT = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const blockJWT = async (req: any, res: Response, next: NextFunction) => {
   const bearer = req.headers.authorization;
   console.log(bearer);
+  const tokenFromSession = req.session.token;
+  console.log(
+    "🚀 ~ file: index.ts:68 ~ blockJWT ~ tokenFromSession:",
+    tokenFromSession
+  );
+  if (!tokenFromSession) {
+    return res.status(401).json({ msg: "Session Expired" });
+  }
   if (!bearer) {
     return res.status(401).json({ msg: "Unauthorized" });
   }
 
   const [, token] = bearer.split(" ");
+
   if (!token) {
+    return res.status(401).json({ msg: "invalid token" });
+  }
+  if (token !== tokenFromSession) {
     return res.status(401).json({ msg: "invalid token" });
   }
   next();

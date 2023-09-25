@@ -12,13 +12,17 @@ import { addPhoto } from "../../controller/chat/addPhoto";
 import { newMessage } from "./newMessage";
 import { onlineState } from "../onlineUsers";
 import { followStatusEmit } from "./followStatus";
+import { sessionMiddleWare } from "../../app";
 
-const IO = new Server(app);
-
-//TODO: CHANGE TO REDIS
+const IO = new Server(app, { cookie: true });
+IO.engine.use(sessionMiddleWare);
 
 IO.use((socket, next) => {
+  //@ts-ignore
+  console.log('🍪',socket.handshake.headers);
+
   const token = socket.handshake?.auth?.token;
+
   console.log(
     "🚀 ~ file: socket.ts:17 ~ IO.use ~ token:",
     socket.handshake?.auth
@@ -40,6 +44,7 @@ IO.use((socket, next) => {
 
 IO.on("connection", async (socket) => {
   console.log(`⚡: ${socket.data.userId} user just connected!`);
+
   const id = socket.data.userId;
   const userName = socket.data.userName;
   socket.emit("connected", socket.data.userId);

@@ -28,6 +28,15 @@ export const getGuestPosts = async (
         videoViews: true,
         userId: true,
 
+        repostUser: {
+          select: {
+            id: true,
+          },
+          where: {
+            id: req.user.id,
+          },
+        },
+
         user: {
           select: {
             id: true,

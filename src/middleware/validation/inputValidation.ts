@@ -120,7 +120,8 @@ export const followerFollowingValidator = [
 
 export const updateDataValidator = [
   body("password").exists().isString().withMessage("invalid password"),
-  body(["userName","newPassword","name"]).custom((value, { req }) => {
+  body(["userName", "newPassword", "name"]).custom((value, { req }) => {
+    console.log(req.body);
     if (req.body.userName && !req.body.name && !req.body.newPassword) {
       return true;
     } else if (!req.body.userName && req.body.name && !req.body.newPassword) {
@@ -130,4 +131,7 @@ export const updateDataValidator = [
     }
     throw new Error("Either userName | newPassword | name is needed");
   }),
+];
+export const deleteAccountValidator = [
+  body("password").exists().isString().withMessage("invalid password"),
 ];

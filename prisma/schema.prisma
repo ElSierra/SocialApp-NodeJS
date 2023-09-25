@@ -96,7 +96,7 @@ model Message {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   text      String?
   photoUri  String?
-  chat      Chat?    @relation(fields: [chatId], references: [id])
+  chat      Chat?    @relation(fields: [chatId], references: [id], onDelete: Cascade)
   chatId    String?  @db.ObjectId
   senderId  String   @db.ObjectId
   sender    User     @relation(fields: [senderId], references: [id], onDelete: Cascade)

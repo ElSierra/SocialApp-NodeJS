@@ -13,10 +13,13 @@ import { getFollowersList } from "../../controller/services/follow/getFollowersL
 import { getFollowingList } from "../../controller/services/follow/getFollowingList";
 import { handleErrors } from "../../middleware/validation/handleErrors";
 import {
+  deleteAccountValidator,
   followerFollowingValidator,
   updateDataValidator,
 } from "../../middleware/validation/inputValidation";
-import { changeUserName } from "../../controller/user/changeUserName";
+import { changeData } from "../../controller/user/changeData";
+import { logout } from "../../controller/user/logout";
+import { deleteAccount } from "../../controller/user/deleteAccount";
 
 const isProduction = config.stage === "production";
 const router = Router();
@@ -56,5 +59,7 @@ router.get(
   handleErrors,
   getFollowersList
 );
-router.post("/update-data", updateDataValidator, handleErrors, changeUserName);
+router.get("/logout", logout);
+router.put("/update-data", updateDataValidator, handleErrors, changeData);
+router.delete("/delete-account", deleteAccountValidator, handleErrors, deleteAccount);
 export default router;
