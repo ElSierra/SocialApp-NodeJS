@@ -27,6 +27,15 @@ export const getGuestPosts = async (
         photoUri: true,
         videoViews: true,
         userId: true,
+        link: {
+          select: {
+            id: true,
+            imageHeight: true,
+            imageUri: true,
+            imageWidth: true,
+            title: true,
+          },
+        },
 
         repostUser: {
           select: {

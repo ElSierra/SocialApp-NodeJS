@@ -1,5 +1,7 @@
 import { NextFunction, Response } from "express";
 import prisma from "../../../lib/prisma/init";
+import validator from "validator";
+import ogs from "open-graph-scraper";
 
 export const postContent = async (
   req: any,
@@ -47,24 +49,73 @@ export const postContent = async (
       return undefined;
     }
   };
+  if (validator.isURL(postText)) {
+    try {
+      const options = { url: postText };
 
-  try {
-    const post = await prisma.post.create({
-      data: {
-        userId: id,
-        photoUri,
-        audioTitle,
-        audioUri: audioUriUpdated(),
-        videoUri: videoUriUpdated(),
-        videoTitle,
-        postText,
-        videoThumbnail,
-      },
-    });
-    if (post) {
-      res.json({ msg: "posted" });
+      const data = await ogs(options);
+      if (data) {
+        const { error, html, result, response } = data;
+        if (result) {
+          console.log("🚀 ~ file: postContent.ts:60 ~ result:", result);
+          //@ts-ignore
+
+          const results = result.ogImage
+            ? result?.ogImage?.length >= 1
+              ? result?.ogImage[0]
+              : undefined
+            : undefined;
+
+          const title = result?.ogTitle;
+          console.log("reached here after");
+          const post = await prisma.post.create({
+            data: {
+              user: {
+                connect: {
+                  id,
+                },
+              },
+              postText,
+              link: {
+                create: {
+                  imageHeight: results?.height
+                    ? Number(results?.height)
+                    : undefined,
+                  imageWidth: results?.width
+                    ? Number(results?.width)
+                    : undefined,
+                  imageUri: results?.url ? results?.url : undefined,
+                  url: postText,
+                  title,
+                },
+              },
+            },
+          });
+          if (post) {
+            return res.json({ msg: "posted" });
+          }
+        }
+      }
+    } catch (e) {}
+  } else {
+    try {
+      const post = await prisma.post.create({
+        data: {
+          userId: id,
+          photoUri,
+          audioTitle,
+          audioUri: audioUriUpdated(),
+          videoUri: videoUriUpdated(),
+          videoTitle,
+          postText,
+          videoThumbnail,
+        },
+      });
+      if (post) {
+        return res.json({ msg: "posted" });
+      }
+    } catch (e) {
+      next(e);
     }
-  } catch (e) {
-    next(e);
   }
 };

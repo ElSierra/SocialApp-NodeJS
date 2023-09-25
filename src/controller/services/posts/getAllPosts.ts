@@ -20,6 +20,15 @@ export const getAllPosts = async (
             userId: req.user.id,
           },
         },
+        link: {
+          select: {
+            id: true,
+            imageHeight: true,
+            imageUri: true,
+            imageWidth: true,
+            title: true,
+          },
+        },
         createdAt: true,
         postText: true,
         audioTitle: true,

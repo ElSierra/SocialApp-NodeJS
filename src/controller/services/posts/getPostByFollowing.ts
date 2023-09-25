@@ -48,6 +48,15 @@ export const getPostByFollowing = async (
           },
           createdAt: true,
           postText: true,
+          link: {
+            select: {
+              id: true,
+              imageHeight: true,
+              imageUri: true,
+              imageWidth: true,
+              title: true,
+            },
+          },
           audioTitle: true,
           audioUri: true,
           videoTitle: true,

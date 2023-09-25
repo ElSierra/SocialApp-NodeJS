@@ -12,16 +12,58 @@ export const searchForPosts = async (
   try {
     const posts = await prisma.post.findMany({
       where: {
-        postText: { contains: q?.toString(),  mode: "insensitive"  },
+        postText: { contains: q?.toString(), mode: "insensitive" },
       },
       orderBy: { id: "desc" },
-      include: {
+      select: {
+        like: {
+          select: {
+            userId: true,
+          },
+        },
+        createdAt: true,
+        postText: true,
+        audioTitle: true,
+        audioUri: true,
+        videoTitle: true,
+        id: true,
+        videoUri: true,
+        photoUri: true,
+        videoViews: true,
+        userId: true,
+
+        repostUser: {
+          select: {
+            id: true,
+          },
+          where: {
+            //@ts-ignore
+            id: req.user.id,
+          },
+        },
+
         user: {
           select: {
+            id: true,
+            imageUri: true,
             name: true,
             userName: true,
             verified: true,
+          },
+        },
+        link: {
+          select: {
+            id: true,
+            imageHeight: true,
             imageUri: true,
+            imageWidth: true,
+            title: true,
+          },
+        },
+        _count: {
+          select: {
+            like: true,
+            comments: true,
           },
         },
       },

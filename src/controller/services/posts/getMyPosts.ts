@@ -55,6 +55,15 @@ export const getMyPosts = async (
             verified: true,
           },
         },
+        link: {
+          select: {
+            id: true,
+            imageHeight: true,
+            imageUri: true,
+            imageWidth: true,
+            title: true,
+          },
+        },
         _count: {
           select: {
             like: true,
