@@ -43,7 +43,7 @@ export const profilePhotoUpload = (
             })
           );
           if (fileResults) {
-            req.imageUri = `https://quick-chop.nyc3.cdn.digitaloceanspaces.com/${
+            req.imageUri = `https://${process.env.SPACES_NAME}.${process.env.SPACES_ENDPOINT_WITHOUT_HTTPS}/${
               photo?.filename.split(".")[0]
             }-sm.gif`;
             unlink(
@@ -91,7 +91,7 @@ export const profilePhotoUpload = (
             })
           );
           if (fileResults) {
-            req.imageUri = `https://quick-chop.nyc3.cdn.digitaloceanspaces.com/${
+            req.imageUri = `https://${process.env.SPACES_NAME}.${process.env.SPACES_ENDPOINT_WITHOUT_HTTPS}/${
               photo?.filename.split(".")[0]
             }-sm.jpg`;
             unlink(

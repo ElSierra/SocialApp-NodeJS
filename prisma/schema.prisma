@@ -61,6 +61,8 @@ model Post {
   like           Like[]
   link           Link?     @relation(fields: [linkId], references: [id])
   linkId         String?   @db.ObjectId
+  photo          Image?    @relation(fields: [photoId], references: [id])
+  photoId        String?   @db.ObjectId
 }
 
 model Like {
@@ -98,6 +100,8 @@ model Message {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   text      String?
   photoUri  String?
+  photo     Image?   @relation(fields: [photoId], references: [id])
+  photoId   String?  @db.ObjectId
   chat      Chat?    @relation(fields: [chatId], references: [id], onDelete: Cascade)
   chatId    String?  @db.ObjectId
   senderId  String   @db.ObjectId
@@ -122,7 +126,7 @@ model Notification {
 }
 
 model Link {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
   url         String
   title       String?
   imageUri    String?
@@ -130,6 +134,15 @@ model Link {
   imageWidth  Int?
 
   Post Post[]
+}
+
+model Image {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  imageUri    String?
+  imageHeight Int?
+  imageWidth  Int?
+  Post        Post[]
+  Message Message[]
 }
 
 enum NotificationType {

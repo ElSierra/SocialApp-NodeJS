@@ -35,6 +35,7 @@ import { getPostByFollowing } from "../../controller/services/posts/getPostByFol
 import { getMyPosts } from "../../controller/services/posts/getMyPosts";
 import { getGuestPosts } from "../../controller/services/posts/getGuestPosts";
 import { rePost } from "../../controller/services/posts/rePost";
+import { postPhotoUpload } from "../../modules/handlePhotoUpload/postPhotoUpload";
 
 
 const router = Router();
@@ -45,13 +46,20 @@ router.get("/random-posts", getRandomPosts);
 router.get("/random-people", getRandomFollowers);
 router.get("/search-posts", searchValidator, handleErrors, searchForPosts);
 router.get("/search-people", searchValidator, handleErrors, searchPeople);
+// router.post(
+//   "/upload-photos",
+//   isProduction && uploadOcean
+//     ? uploadOcean.array("photos")
+//     : upload.array("photos"),
+//   postPhoto
+// );
+
 router.post(
-  "/upload-photos",
-  isProduction && uploadOcean
-    ? uploadOcean.array("photos")
-    : upload.array("photos"),
-  postPhoto
+  "/upload-photo",
+  upload.single("photo"),
+  postPhotoUpload
 );
+
 
 router.post(
   "/upload-video",

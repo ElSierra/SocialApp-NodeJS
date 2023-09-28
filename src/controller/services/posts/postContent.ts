@@ -17,6 +17,7 @@ export const postContent = async (
     photoUri,
     postText,
     videoThumbnail,
+    photo,
   }: {
     audioUri: string;
     audioTitle: string;
@@ -25,8 +26,13 @@ export const postContent = async (
     photoUri: string[];
     postText: string;
     videoThumbnail: string;
+    photo: {
+      uri: string;
+      height: number;
+      width: number;
+    };
   } = req.body;
-
+  console.log("body🚀", req.body);
   const audioUriUpdated = () => {
     if (audioUri) {
       if (audioUri.startsWith("http")) {
@@ -49,7 +55,9 @@ export const postContent = async (
       return undefined;
     }
   };
-  if (validator.isURL(postText)) {
+
+  if (postText && validator.isURL(postText) === true) {
+    console.log("reached after false");
     try {
       const options = { url: postText };
 
@@ -95,14 +103,51 @@ export const postContent = async (
             return res.json({ msg: "posted" });
           }
         }
+        if (error) {
+          console.log(error);
+          const post = await prisma.post.create({
+            data: {
+              user: {
+                connect: {
+                  id,
+                },
+              },
+              photoUri,
+              audioTitle,
+              audioUri: audioUriUpdated(),
+              videoUri: videoUriUpdated(),
+              videoTitle,
+              postText,
+              videoThumbnail,
+            },
+          });
+          if (post) {
+            return res.json({ msg: "posted" });
+          }
+        }
       }
     } catch (e) {}
   } else {
     try {
+      console.log("reached");
       const post = await prisma.post.create({
         data: {
-          userId: id,
+          user: {
+            connect: {
+              id,
+            },
+          },
           photoUri,
+          photo:
+            photo?.height && photo?.uri && photo?.width
+              ? {
+                  create: {
+                    imageHeight: photo.height,
+                    imageUri: photo.uri,
+                    imageWidth: photo.width,
+                  },
+                }
+              : undefined,
           audioTitle,
           audioUri: audioUriUpdated(),
           videoUri: videoUriUpdated(),

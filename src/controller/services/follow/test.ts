@@ -4,15 +4,10 @@ import { Response } from "express";
 
 export const followUser = async () => {
   try {
-    const userWithFollower = await prisma.user.update({
+    const userWithFollower = await prisma.post.deleteMany({
       where: {
-        id: "64e3ee55944e422c92619985",
-      },
-      data: {
-        followers: {
-          connect: {
-            id: "64e3eea6944e422c92619987",
-          },
+        photoUri: {
+          isEmpty: false,
         },
       },
     });
@@ -25,4 +20,4 @@ export const followUser = async () => {
   }
 };
 
-followUser()
+followUser();

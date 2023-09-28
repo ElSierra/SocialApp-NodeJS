@@ -82,6 +82,14 @@ export const getPostByFollowing = async (
               verified: true,
             },
           },
+          photo: {
+            select:{
+              id:true,
+              imageUri:true,
+              imageHeight:true,
+              imageWidth:true,
+            }
+          },
           _count: {
             select: {
               like: true,

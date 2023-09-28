@@ -32,6 +32,14 @@ export const getChatList = async (
           select: {
             text: true,
             photoUri: true,
+            photo: {
+              select: {
+                id: true,
+                imageHeight: true,
+                imageUri: true,
+                imageWidth: true,
+              },
+            },
             sender: {
               select: {
                 userName: true,

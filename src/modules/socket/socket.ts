@@ -93,7 +93,7 @@ IO.on("connection", async (socket) => {
     console.log("🚀 ~ file: socket.ts:76 ~ socket.on ~ data:", data);
     IO.to(data.chatId).emit("message", data);
     socket.emit("sent", true);
-    addPhoto(data.message.photoUri, data.chatId, data.id, id)
+    addPhoto(data.message.photo, data.chatId, data.id, id)
       .then((e) => {})
       .catch((e) => {});
   });

@@ -26,6 +26,14 @@ export const getMyPosts = async (
             userId: true,
           },
         },
+        photo: {
+          select:{
+            id:true,
+            imageUri:true,
+            imageHeight:true,
+            imageWidth:true,
+          }
+        },
         createdAt: true,
         postText: true,
         audioTitle: true,

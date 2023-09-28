@@ -50,13 +50,13 @@ export const loginValidation = [
 
 export const createPostValidator = [
   body("user").optional().isMongoId().withMessage("Invalid user ID"),
-  body("audioUri").custom((value, { req }) => {
+  body(["audioUri", "videoUri", "photo"]).custom((value, { req }) => {
     if (
       ((req.body.audioUri || req.body.audioTitle) &&
-        !(req.body.videoUri || req.body.photoUri)) ||
+        !(req.body.videoUri || req.body.photo)) ||
       ((req.body.videoUri || req.body.videoTitle) &&
-        !(req.body.audioUri || req.body.photoUri)) ||
-      (req.body.photoUri && !(req.body.audioUri || req.body.videoUri)) ||
+        !(req.body.audioUri || req.body.photo)) ||
+      (req.body.photo && !(req.body.audioUri || req.body.videoUri)) ||
       req.body.postText
     ) {
       return true;
@@ -65,9 +65,26 @@ export const createPostValidator = [
       "Either audio (URI and title) or video URI or photo URIs must be provided"
     );
   }),
-  body("photoUri")
+  body("photo")
     .optional()
-    .isArray()
+    .isObject()
+    .withMessage("Photo must be an object")
+    .bail()
+    .custom((value) => {
+      if (!value.uri || !value.height || !value.width) {
+        throw new Error("Incomplete or malformed object");
+      }
+      if (
+        typeof value.uri !== "string" ||
+        typeof value.height !== "number" ||
+        typeof value.width !== "number"
+      ) {
+        throw new Error(
+          "Either uri isn't a string or height isn't a string or width isn't a string"
+        );
+      }
+      return true;
+    })
     .withMessage("Photo Uri must be an array of URI"),
   body("audioTitle")
     .if(body("audioUri").exists())

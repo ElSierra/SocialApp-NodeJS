@@ -1,7 +1,11 @@
 import prisma from "../../lib/prisma/init";
 
 export const addPhoto = async (
-  photoUri: string,
+  photo: {
+    height: number;
+    width: number;
+    uri: string;
+  },
   chatId: string,
   id: string,
   senderId: string
@@ -18,10 +22,23 @@ export const addPhoto = async (
     console.log("🚀 ~ file: addMessages.ts:18 ~ chat:", chat);
     const messages = await prisma.message.create({
       data: {
-        photoUri,
         id,
-        senderId,
-        chatId,
+        sender: {
+          connect: { id: senderId },
+        },
+        photo:
+          photo?.height && photo?.uri && photo?.width
+            ? {
+                create: {
+                  imageHeight: photo.height,
+                  imageUri: photo.uri,
+                  imageWidth: photo.width,
+                },
+              }
+            : undefined,
+        chat: {
+          connect: { id: chatId },
+        },
       },
     });
     console.log("🚀 ~ file: getMessages.ts:16 ~ messages:", messages);

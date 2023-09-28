@@ -20,6 +20,15 @@ export const getAllPosts = async (
             userId: req.user.id,
           },
         },
+        photo: {
+          select:{
+            id:true,
+            imageUri:true,
+            imageHeight:true,
+            imageWidth:true,
+          }
+        },
+        
         link: {
           select: {
             id: true,
@@ -40,6 +49,7 @@ export const getAllPosts = async (
         videoViews: true,
         userId: true,
         videoThumbnail: true,
+        
 
         repostUser: {
           select: {
