@@ -23,6 +23,7 @@ export const newMessage = async (
   console.log("🚀 ~ file: newMessage.ts:20 ~ onlineUsers:", onlineUsers);
   getReceiverNotificationToken(data.chatId, id)
     .then((r: any) => {
+      console.log("🚀 ~ file: newMessage.ts:26 ~ .then ~ r:", r)
       if (onlineUsers.includes(r.userId)) {
         console.log("⚠️⚠️⚠️");
         return;

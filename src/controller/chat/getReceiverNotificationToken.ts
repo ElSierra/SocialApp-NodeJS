@@ -4,6 +4,8 @@ export const getReceiverNotificationToken = async (
   chatId: string,
   authUserId: string
 ) => {
+  console.log("🚀 ~ file: getReceiverNotificationToken.ts:7 ~ authUserId:", authUserId)
+  console.log("🚀 ~ file: getReceiverNotificationToken.ts:7 ~ chatId:", chatId)
   try {
     const userIds = await prisma.chat.findUnique({
       where: {

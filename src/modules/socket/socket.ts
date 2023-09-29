@@ -19,7 +19,7 @@ IO.engine.use(sessionMiddleWare);
 
 IO.use((socket, next) => {
   //@ts-ignore
-  console.log('🍪',socket.handshake.headers);
+  console.log("🍪", socket.handshake.headers);
 
   const token = socket.handshake?.auth?.token;
 
@@ -91,7 +91,20 @@ IO.on("connection", async (socket) => {
   );
   socket.on("newPhoto", async (data) => {
     console.log("🚀 ~ file: socket.ts:76 ~ socket.on ~ data:", data);
-    IO.to(data.chatId).emit("message", data);
+    IO.to(data.chatId).emit("message", {
+      message: {
+        sender: data.message.sender,
+        photo: {
+          imageUri: data?.message?.photo?.uri,
+          imageWidth: data?.message?.photo?.width,
+          imageHeight: data?.message?.photo?.height,
+        },
+        id: data.message?.id,
+        createdAt: data?.message?.createdAt
+      },
+      imageUri: data?.imageUri,
+      chatId: data?.chatId,
+    });
     socket.emit("sent", true);
     addPhoto(data.message.photo, data.chatId, data.id, id)
       .then((e) => {})
