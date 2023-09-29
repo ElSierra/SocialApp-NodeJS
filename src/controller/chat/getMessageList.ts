@@ -28,6 +28,7 @@ export const getMessageList = async (
           select: {
             text: true,
             photoUri: true,
+            photo:true,
             sender: {
               select: {
                 userName: true,

@@ -13,6 +13,9 @@ import { newMessage } from "./newMessage";
 import { onlineState } from "../onlineUsers";
 import { followStatusEmit } from "./followStatus";
 import { sessionMiddleWare } from "../../app";
+import { getReceiverNotificationToken } from "../../controller/chat/getReceiverNotificationToken";
+import Expo from "expo-server-sdk";
+import expo from "../../lib/expo/init";
 
 const IO = new Server(app, { cookie: true });
 IO.engine.use(sessionMiddleWare);
@@ -90,6 +93,7 @@ IO.on("connection", async (socket) => {
     }
   );
   socket.on("newPhoto", async (data) => {
+    const onlineUsers = onlineState.getValues();
     console.log("🚀 ~ file: socket.ts:76 ~ socket.on ~ data:", data);
     IO.to(data.chatId).emit("message", {
       message: {
@@ -109,6 +113,36 @@ IO.on("connection", async (socket) => {
     addPhoto(data.message.photo, data.chatId, data.id, id)
       .then((e) => {})
       .catch((e) => {});
+
+      getReceiverNotificationToken(data.chatId, id)
+      .then((r: any) => {
+        console.log("🚀 ~ file: newMessage.ts:26 ~ .then ~ r:", r)
+        if (onlineUsers.includes(r.userId)) {
+          console.log("⚠️⚠️⚠️");
+          return;
+        }
+        console.log("🚀 ~ file: socket.ts:129 ~ .then ~ r:", r);
+        if (!Expo.isExpoPushToken(r.notificationId)) {
+          return;
+        }
+        expo.sendPushNotificationsAsync([
+          {
+            to: r.notificationId,
+            sound: "default",
+            badge: 1,
+            mutableContent:true,
+            title: `@${userName}`,
+            body: `📷 sent a photo`,
+            subtitle: "sent a photo",
+            categoryId:"message",
+            data: {
+              chatId: data.chatId,
+              url: `qui-ojo://messages/${data.chatId}`,
+            },
+          },
+        ]);
+      })
+      .catch((e) => console.log(e));
   });
   socket.on("deleteMessage", async (messageId) => {
     console.log("🚀 ~ file: socket.ts:124 ~ socket.on ~ messageId:", messageId);
