@@ -23,7 +23,7 @@ export const postPhotoUpload = (
     const fileResults: any = await s3Config.send(
       new PutObjectCommand({
         Bucket: process.env.SPACES_NAME as string,
-        Key: `${photo?.filename.split(".")[0]}.jpg`,
+        Key: `${photo?.filename}`,
         Body: filetoUpload,
         ContentType: "image/jpeg",
         ACL: "public-read",
