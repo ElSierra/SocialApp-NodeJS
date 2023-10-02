@@ -36,6 +36,7 @@ import { getMyPosts } from "../../controller/services/posts/getMyPosts";
 import { getGuestPosts } from "../../controller/services/posts/getGuestPosts";
 import { rePost } from "../../controller/services/posts/rePost";
 import { postPhotoUpload } from "../../modules/handlePhotoUpload/postPhotoUpload";
+import { getSinglePost } from "../../controller/services/posts/getSinglePost";
 
 
 const router = Router();
@@ -92,6 +93,7 @@ router.get(
   getPostByFollowing
 );
 router.get("/my-posts", getPostsValidator, handleErrors, getMyPosts);
+router.get("/single-post",getSinglePost);
 router.get("/guest-posts", getPostsValidator, handleErrors, getGuestPosts);
 router.get("/re-post", followValidator, handleErrors, rePost);
 
