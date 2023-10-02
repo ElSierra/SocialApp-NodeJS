@@ -44,7 +44,9 @@ export const postPhotoUpload = (
       if (err) {
         return res.status(400).json({ msg: "upload failed" });
       }
+      console.log("🚀 ~ file: postPhotoUpload.ts:48 ~ imageSize ~ image:", image)
       return res.json({ photo: image });
+ 
     }
     return res.json({ msg: "upload failed" });
   });
