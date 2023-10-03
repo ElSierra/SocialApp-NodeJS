@@ -37,7 +37,7 @@ import { getGuestPosts } from "../../controller/services/posts/getGuestPosts";
 import { rePost } from "../../controller/services/posts/rePost";
 import { postPhotoUpload } from "../../modules/handlePhotoUpload/postPhotoUpload";
 import { getSinglePost } from "../../controller/services/posts/getSinglePost";
-
+import { deletePostById } from "../../controller/services/posts/deletePostbyId";
 
 const router = Router();
 const isProduction = config.stage === "production";
@@ -55,12 +55,7 @@ router.get("/search-people", searchValidator, handleErrors, searchPeople);
 //   postPhoto
 // );
 
-router.post(
-  "/upload-photo",
-  upload.single("photo"),
-  postPhotoUpload
-);
-
+router.post("/upload-photo", upload.single("photo"), postPhotoUpload);
 
 router.post(
   "/upload-video",
@@ -93,8 +88,9 @@ router.get(
   getPostByFollowing
 );
 router.get("/my-posts", getPostsValidator, handleErrors, getMyPosts);
-router.get("/single-post",getSinglePost);
+router.get("/single-post", getSinglePost);
 router.get("/guest-posts", getPostsValidator, handleErrors, getGuestPosts);
 router.get("/re-post", followValidator, handleErrors, rePost);
+router.delete("/delete-post", deletePostById);
 
 export default router;
