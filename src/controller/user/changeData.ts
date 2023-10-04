@@ -36,7 +36,7 @@ export const changeData = async (
             password: newPassword
               ? await createHashedPassword(newPassword)
               : undefined,
-            userName: userName.trim() || undefined,
+            userName: userName ? userName.trim() : undefined,
           },
         });
         if (updatedUser) {
