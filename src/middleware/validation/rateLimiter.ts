@@ -9,7 +9,7 @@ export const apiLimiter = rateLimit({
 
 export const authRateLimiter = rateLimit({
   windowMs: 3 * 60 * 60 * 1000, 
-  max: 5, 
+  max: 20, 
   standardHeaders: true,
   legacyHeaders: false,
   
