@@ -14,16 +14,7 @@ export const getAllPosts = async (
       },
       select:{
         following:{
-          include:{
-            user:{
-              select:{
-                imageUri:true,
-                post:true,
-                userName:true,
-                name:true,
-              }
-            }
-          }
+         
         }
       }
     })

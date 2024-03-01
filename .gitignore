@@ -3,3 +3,4 @@
 .env
 /uploads
 access.log
+/dist

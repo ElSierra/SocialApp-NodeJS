@@ -4,9 +4,9 @@
   "description": "A simple TS-NODE Starter Project",
   "main": "server.js",
   "scripts": {
-    "start": "cross-env STAGE=production  ts-node --transpile-only ./src/server.ts",
-    "build": "rimraf ./build && tsc",
-    "dev": "npx nodemon",
+    "start": "npm run build && cross-env STAGE=production node dist/server.js",
+    "build": "npx tsc",
+    "dev": "nodemon src/server.ts",
     "dev:prod": "cross-env STAGE=production npx nodemon"
   },
   "keywords": [
